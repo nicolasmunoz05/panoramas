@@ -1,0 +1,82 @@
+/* src/components/Home.css */
+
+.carousel-container {
+    max-width: 90%; /* Define el ancho del Carousel como el 80% del contenedor */
+    margin: 0 auto; /* Centra el Carousel horizontalmente */
+  }
+  
+  /* Ajustar la altura de las imágenes del Carousel */
+  .carousel-item img {
+    object-fit: cover;
+    height: 400px; /* Aumentar la altura del banner */
+    width: 100%;
+  }
+  
+  .search-bar input {
+    border: 2px solid #00bcd4; /* Borde celeste */
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    max-width: 500px;
+  }
+  
+  h2 {
+    color: #00796b; /* Verde-azulado */
+  }
+  
+
+  /* src/components/Home.css */
+
+/* Estilos del Navbar */
+.navbar {
+    background-color: #00bcd4; /* Fondo celeste oscuro */
+    padding: 10px 20px;
+  }
+  
+  .navbar .navbar-brand {
+    color: #fff;
+    font-weight: bold; /* Negrita */
+    font-size: 1.4rem; /* Tamaño de fuente más grande */
+  }
+  
+  .navbar .nav-link {
+    color: #fff;
+    font-weight: 600; /* Seminegrita */
+    font-size: 1.2rem; /* Aumenta el tamaño de fuente */
+    margin-right: 15px;
+  }
+  
+  .navbar .nav-link:hover {
+    color: #e0f7fa; /* Un poco más claro al hacer hover */
+  }
+  
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5); /* Botón de toggler con borde blanco */
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+
+/* Estilos para las noticias */
+.news-item {
+    text-align: center;
+    padding: 10px;
+    width: 40%; /* Mantener el tamaño reducido */
+    margin: 0 15px; /* Agregar márgenes horizontales de 15px */
+  }
+  
+  .news-image {
+    width: 100%; /* Mantener la imagen adaptada al contenedor */
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .news-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem; /* Mantener el tamaño de fuente reducido */
+    margin-top: 5px;
+    color: #333;
+  }
