@@ -46,15 +46,7 @@ const Home = () => {
           <div className="container-fluid">
             <a className="navbar-brand" href="#">☰</a>
             <a className="navbar-brand-center" href="#">ChilExplora!</a>
-
-
-            {/* Botón hamburguesa */}
-            <button className="navbar-toggler" type="button" onClick={toggleMenu}>
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-            {/* Menú desplegable */}
-            <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+            {/* Links Navbar */}
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
                   <a className="nav-link" href="#">Publica con Nosotros</a>
@@ -67,9 +59,9 @@ const Home = () => {
                 </li>
               </ul>
             </div>
-          </div>
         </nav>
       </Row>
+
 
       {/* Banner Carousel */}
       <div className="carousel-container">
@@ -90,14 +82,45 @@ const Home = () => {
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
-
+        
+      {/* Barra Busqueda */}
         <Row className="mt-2">
           <div className="search-bar">
-            <input type="text" className="form-control" placeholder="Buscar eventos, panoramas..." />
+            <input type="text" className="form-control" placeholder="Buscar eventos, panoramas..." />  
           </div>
+
+    <button type="button" className="btn btn-info mt-2">
+      Mapa
+    </button>
         </Row>
       </div>
 
+      {/* Body - Eventos */}
+      <Row className="mt-2">
+        <div className="carousel-container mt-1">
+          <h2>Eventos de esta semana</h2>
+          <Slider {...settings}>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Noticia 1" className="news-image" />
+              <p className="news-text">Evento 1: Descripción breve del Evento</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Evento 2" className="news-image" />
+              <p className="news-text">Evento 2: Descripción breve del Evento</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Evento 3" className="news-image" />
+              <p className="news-text">Evento 3: Descripción breve del Evento</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Evento 4" className="news-image" />
+              <p className="news-text">Evento 4: Descripción breve del Evento</p>
+            </div>
+          </Slider>
+        </div>
+      </Row>
+
+      {/* Body - Noticias */}
       <Row className="mt-2">
         <div className="carousel-container mt-1">
           <h2>Noticias Recientes</h2>
@@ -121,6 +144,33 @@ const Home = () => {
           </Slider>
         </div>
       </Row>
+
+      {/* Body - Noticias */}
+      <Row className="mt-2">
+        <div className="carousel-container mt-1">
+          <h2>Cultura</h2>
+          <Slider {...settings}>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Noticia 1" className="news-image" />
+              <p className="news-text">Evento Cultural 1: Descripción breve</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Noticia 2" className="news-image" />
+              <p className="news-text">Evento Cultural 2: Descripción breve</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Noticia 3" className="news-image" />
+              <p className="news-text">Evento Cultural 3: Descripción breve</p>
+            </div>
+            <div className="news-item">
+              <img src="https://via.placeholder.com/300x300" alt="Noticia 4" className="news-image" />
+              <p className="news-text">Evento Cultural 4: Descripción breve</p>
+            </div>
+          </Slider>
+        </div>
+      </Row>
+
+
     </Container>
   );
 };
