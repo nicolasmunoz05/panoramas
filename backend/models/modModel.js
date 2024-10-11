@@ -1,18 +1,18 @@
+import mongoose from "mongoose";
+import Evento from "./eventoModel.js";
+import Panorama from "./panoramaModel.js";
 const modSchema = new mongoose.Schema({
-    id_mod: {
+    
+    evento_id_mod: {
       type: mongoose.Schema.Types.ObjectId,
-      auto: true
-    },
-    eventoid_mod: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Evento'
+      ref: Evento
     },
     panorama_id_mod: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Panorama'
+      ref: Panorama
     },
     accion_mod: {
-      type: Boolean,
+      type: String,
       required: true
     },
     comentario_mod: {
@@ -24,7 +24,7 @@ const modSchema = new mongoose.Schema({
       required: true,
       default: Date.now
     }
-  }, { collection: 'Mod' });
+  },{ versionKey: false });
   
   const Mod = mongoose.model('Mod', modSchema);
-  module.exports = Mod;
+  export default Mod;
