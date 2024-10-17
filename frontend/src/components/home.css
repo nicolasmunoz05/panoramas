@@ -38,6 +38,32 @@
   left: 10px; /* Al hacer hover, el botón se mueve hacia dentro */
 }
 
+.main-event-container{
+  display: flex;
+  align-items: center; 
+}
+.main-event-container h3{
+  color: #000000; /* Verde-azulado */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-left: 20px;
+  align-self: flex-start;
+  margin-top: 1%;
+}
+.main-event-container h4{
+  color: #7c7c7c; /* Verde-azulado */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-left: 0px;
+  margin-top: 1%;
+  font-size: 12px;
+}
+.main-event-container p{
+  color: #000000; /* Verde-azulado */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-left: 0px;
+  margin-top: 1%;
+  font-size: 15px;
+}
+
 
 /*Banner principal con carrusel */
 .banner-carousel {
@@ -51,7 +77,9 @@
   height: 250px;
   width: 100%;
   border-radius:50px;
+  padding:1px;
 }
+
 
 
 /* Estilos del Navbar */
@@ -100,6 +128,7 @@
 
 /* Cuerpo, items del cuerpo */
 .carousel-container h2 {
+  margin-top: 1%;
   color: #0076c5; 
   font-family: Poppins;
 }

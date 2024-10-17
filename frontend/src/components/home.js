@@ -82,31 +82,50 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* Banner Carousel */}
-      <div className="banner-carousel">
-        <Carousel>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="https://via.placeholder.com/1200x400"
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <p>Evento 1</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="https://via.placeholder.com/1200x400"
-              alt="Second slide"
-            />
-            <Carousel.Caption>
-              <p>Evento 2</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-        </Carousel>
+      <div className="main-event-container">
+        <div className="banner-carousel">
+          <Carousel>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="/lagunamaule.jpg"
+                alt="First slide"
+              />
+              <Carousel.Caption>
+                <p>Foto 1</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="/lagunamaule2.jpg"
+                alt="Second slide"
+              />
+              <Carousel.Caption>
+                <p>Foto 2</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          </Carousel>
+        </div>
+        <h3>
+  Laguna del Maule
+  <h4>Complejo volcánico laguna del maule</h4>
+  <p>
+    La Laguna del Maule fue inicialmente una laguna natural ubicada sobre una zona cubierta por la lava del volcán Laguna del Maule que posteriormente fue represada para regular y asegurar el abastecimiento de riego en la cuenca del río Maule. <br /><br />
+    Provincia: Mendoza/Neuquén. Latitud: 36° 03′ 32″ S. Longitud: 70° 30′ 04″ O. <a href="#">Ver en mapa</a>
+    <br /><br />
+    <img src="/señales/Picnic.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/AcuaSki.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Canoa.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Camping.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Alojamiento.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Equitacion.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Natacion.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Nautica.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+    <img src="/señales/Pesca.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
+  </p>
+</h3>
       </div>
 
       {/* Body - Eventos */}
