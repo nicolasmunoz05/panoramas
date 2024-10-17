@@ -12,7 +12,7 @@ const Home = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 1,
+    slidesToScroll: 10,
     responsive: [
       {
         breakpoint: 768,
@@ -93,8 +93,7 @@ const Home = () => {
               alt="First slide"
             />
             <Carousel.Caption>
-              <h3>Evento 1</h3>
-              <p>Descripción del evento 1.</p>
+              <p>Evento 1</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
@@ -104,8 +103,7 @@ const Home = () => {
               alt="Second slide"
             />
             <Carousel.Caption>
-              <h3>Evento 2</h3>
-              <p>Descripción del evento 2.</p>
+              <p>Evento 2</p>
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>

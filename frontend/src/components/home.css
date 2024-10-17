@@ -5,6 +5,12 @@
   display: flex;
   align-items: center; 
 }
+
+.header-container h2 {
+  color: #0076c5; /* Verde-azulado */
+  font-family: Poppins;
+}
+
 .search-bar {
   margin-left: auto; /* Lleva la barra de búsqueda a la derecha */
   width:300px;
@@ -14,30 +20,35 @@
   height: 50px;
 }
 .btn-map {
-  margin: 0 auto; 
+  position: fixed; /* Hace que el botón se mantenga en una posición fija en la pantalla */
+  bottom: 20px; /* Se asoma desde la parte inferior */
+  left: -20px; /* Se posiciona fuera de la pantalla inicialmente */
   width: 100px;
   background-color: #ff7878;
   border-radius: 5px;
   height: 50px;
   font-family: Roboto;
-  transition: all 0.3s ease; /* Suaviza la transición del hover */
+  transition: all 0.3s ease, left 0.5s ease; /* Suaviza la transición, incluyendo el movimiento de la izquierda */
+  z-index: 1000;
 }
+
 .btn-map:hover {
   transform: scale(1.1); /* Aumenta ligeramente el tamaño */
   background-color: #ff5252; /* Cambia a un color más oscuro al pasar el mouse */
+  left: 10px; /* Al hacer hover, el botón se mueve hacia dentro */
 }
 
 
 /*Banner principal con carrusel */
 .banner-carousel {
-  max-width: 25%;
+  max-width: 15%;
   display: inline-block;
   margin-left: 5%;
   margin-top: 1%;
 }
 .carousel-item img {
   object-fit: cover;
-  height: 400px;
+  height: 250px;
   width: 100%;
   border-radius:50px;
 }
@@ -45,7 +56,7 @@
 
 /* Estilos del Navbar */
 .navbar {
-    background-color: #45daff; /* Fondo celeste oscuro */
+    background-color: #0fc1ee; /* Fondo celeste oscuro */
     padding: 10px 20px;
   }
   .navbar-brand {
@@ -82,10 +93,14 @@
 
 /* Estilos para las noticias */
 .carousel-container{
+  margin-inline:5%;
+  max-width: 90% !important;
+}
+
 
 /* Cuerpo, items del cuerpo */
-h2 {
-  color: #0076c5; /* Verde-azulado */
+.carousel-container h2 {
+  color: #0076c5; 
   font-family: Poppins;
 }
 
@@ -95,17 +110,17 @@ h2 {
     text-align: center;
     padding: 10px;
     width: 40%; /* Mantener el tamaño reducido */
-  }
-  .news-image {
-    width: 100%; /* Mantener la imagen adaptada al contenedor */
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  .news-text {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem; /* Mantener el tamaño de fuente reducido */
-    margin-top: 5px;
-    color: #333;
-  }
+}
+.news-image {
+  width: 100%; /* Mantener la imagen adaptada al contenedor */
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.news-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem; /* Mantener el tamaño de fuente reducido */
+  margin-top: 5px;
+  color: #333;
 }
