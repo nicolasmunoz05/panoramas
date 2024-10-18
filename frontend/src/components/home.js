@@ -93,7 +93,7 @@ const Home = () => {
                 alt="First slide"
               />
               <Carousel.Caption>
-                <p>Foto 1</p>
+                <p>Fotto 1</p>
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
