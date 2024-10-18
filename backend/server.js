@@ -6,6 +6,7 @@ import usuarioRoutes from "./routes/usuarioRoutes.js";
 import panoramaRoutes from "./routes/panoramaRoutes.js";
 import categoriaRoutes from "./routes/categoriaRoutes.js";
 import modRoutes from "./routes/modRoutes.js";
+import longinRoutes from "./routes/loginRoutes.js";
 // import placeRoutes from "./routes/placeRoutes.js";
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -28,6 +29,7 @@ app.use('/categoria', categoriaRoutes);
 app.use('/mod', modRoutes);
 // app.use('/places', placeRoutes);
 app.use('/public', express.static(`${__dirname}/uploads`));
+app.use('/login', longinRoutes);
 
 app.get('/', (req, res) => {
     res.send('Opa nico');
