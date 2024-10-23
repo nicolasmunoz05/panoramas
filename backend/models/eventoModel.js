@@ -8,11 +8,11 @@ const eventoSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    fecha_evento_inicio: {
+    fecha_inicio_evento: {
       type: Date,
       required: true
     },
-    fecha_evento_termino: {
+    fecha_termino_evento: {
       type: Date,
       required: true
     },
@@ -24,11 +24,15 @@ const eventoSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    ubicacion_evento_ciudad: {
+    ubicacion_comuna_evento:{
       type: String,
       required: true
     },
-    ubicacion_evento_region: {
+    ubicacion_ciudad_evento: {
+      type: String,
+      required: true
+    },
+    ubicacion_region_evento: {
       type: String,
       required: true
     },

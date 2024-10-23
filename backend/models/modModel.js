@@ -19,6 +19,11 @@ const modSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    creador_mod: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Usuario,
+      required: true
+    },
     fecha_mod: {
       type: Date,
       required: true,
@@ -28,3 +33,4 @@ const modSchema = new mongoose.Schema({
   
   const Mod = mongoose.model('Mod', modSchema);
   export default Mod;
+  

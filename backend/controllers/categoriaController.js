@@ -33,8 +33,8 @@ export const encontrarCategoria = async (req, res) => {
 export const editarCategoria = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre_categoria } = req.body;
-        const data = await Categoria.updateOne({_id:id}, { $set: { nombre_categoria }}); 
+        const { nombre_categoria, img_categoria } = req.body;
+        const data = await Categoria.updateOne({_id:id}, { $set: { nombre_categoria, img_categoria }}); 
         res.json(data); 
     } catch (error) {
         res.status(500).json({ message: error.message }); 

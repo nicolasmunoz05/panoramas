@@ -36,6 +36,19 @@ const panoramaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    ubicacion_comuna_panorama: {
+        type: String,
+        required: true
+    },
+    creador_panorama: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Usuario,
+        required: true
+    },
+    status_panorama: {
+        type: String,
+        required: true
+      },
     img_panorama: [
         {
             type: String, 

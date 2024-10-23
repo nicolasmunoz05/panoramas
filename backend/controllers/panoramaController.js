@@ -59,7 +59,10 @@ export const editarPanorama = async (req, res) => {
             horario_inicio_panorama, 
             horario_termino_panorama, 
             ubicacion_ciudad_panorama, 
-            ubicacion_region_panorama, 
+            ubicacion_region_panorama,
+            ubicacion_comuna_panorama,
+            creador_panorama,
+            status_panorama, 
             img_toBorrar 
         } = req.body;
 
@@ -76,7 +79,10 @@ export const editarPanorama = async (req, res) => {
             horario_inicio_panorama, 
             horario_termino_panorama, 
             ubicacion_ciudad_panorama, 
-            ubicacion_region_panorama 
+            ubicacion_region_panorama,
+            ubicacion_comuna_panorama,
+            creador_panorama,
+            status_panorama 
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
