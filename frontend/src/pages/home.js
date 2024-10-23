@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Carousel } from 'react-bootstrap';
 import Slider from "react-slick";
-import './home.css';
+import '../styles/home.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Navbar from '../components/navbar'; // Asegúrate de que la ruta sea correcta
+
 
 const Home = () => {
   // Configuración del carrusel de noticias
@@ -33,38 +35,7 @@ const Home = () => {
 
   return (
     <Container fluid>
-      <Row>
-        {/* Navbar */}
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              ☰
-            </a>
-            <a className="navbar-brand-center" href="#">
-              ChilExplora!
-            </a>
-            {/* Links Navbar */}
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Publica con Nosotros
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Iniciar Sesión
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Región
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </Row>
-
+            <Navbar />
       {/* Header */}
       <div className="header-container">
         <h2>Bienvenido, Invitado</h2>

@@ -1,13 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './components/home';
+import Home from './pages/home';
+import Moderador from './pages/moderador';
+
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* Puedes agregar más rutas aquí para otras páginas */}
+        <Route path="/moderador" element={<Moderador />} />
       </Routes>
     </Router>
   );

@@ -1,0 +1,13 @@
+[33m8ce797a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33mb8b5956[m HEAD@{1}: commit: Reorden Front, Vista Base Moderador, Falta Conectar Back
+[33m8ce797a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{2}: pull --tags origin master: Fast-forward
+[33mf107b3f[m HEAD@{3}: commit: Prueba git
+[33ma104f50[m HEAD@{4}: commit: Agregados iconos y retocado estilos home
+[33m815e28a[m HEAD@{5}: commit: Corrección de estilos y botón mapa
+[33m9091556[m HEAD@{6}: commit: Rehechos y ordenados componentes de home, falta mucho
+[33m20440ae[m HEAD@{7}: commit: +Backend con algunas falencias
+[33mbcb52ad[m HEAD@{8}: commit: Se agregó el body, se limpio el orden
+[33m8b15fe8[m HEAD@{9}: commit: Pequeños cambios, falta menu hamburguesa
+[33me4df31a[m HEAD@{10}: commit: Base del Front (Home)
+[33m4314eee[m HEAD@{11}: commit: Carpetas iniciales y models
+[33m3bb103d[m HEAD@{12}: commit (initial): Initialize project using Create React App
