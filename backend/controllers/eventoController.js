@@ -49,8 +49,8 @@ export const encontrarEvento = async (req, res) => {
 export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
-        const { titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento,descripcion_breve_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento } = req.body;
-        const data = await Evento.updateOne({_id:id}, { $set: {titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento,descripcion_breve_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento }}); 
+        const { titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento,descripcion_breve_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento, precio_evento } = req.body;
+        const data = await Evento.updateOne({_id:id}, { $set: {titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento,descripcion_breve_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento, precio_evento }}); 
         res.json(data); 
     } catch (error) {
         res.status(500).json({ message: error.message }); 
@@ -90,9 +90,20 @@ export const borrarEvento = async (req, res) => {
     }
 }
 
+
 export const ordenarEvento = async (req, res) => {
     try {
-        const data = await Evento.find().sort({ fecha_evento_inicio: -1 });
+        const hoy = new Date();
+        const fechaLimite = new Date();
+        fechaLimite.setDate(hoy.getDate() + 7);
+
+        const data = await Evento.find({
+            fecha_inicio_evento: { $gte: hoy },
+            fecha_termino_evento: { $lte: fechaLimite },
+            aceptacion_evento: true,
+            status_evento: { $ne: "terminado" }
+        }).sort({ fecha_inicio_evento: -1 });
+
         res.json(data);
     } catch (error) {
         res.status(500).json({ message: error.message });

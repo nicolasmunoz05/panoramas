@@ -66,6 +66,10 @@ const eventoSchema = new mongoose.Schema({
       required: true,
       default: Date.now
     },
+    precio_evento: {
+      type: String,
+      default: 'gratis'
+    },
     img_evento: [
       {
           type: String, 

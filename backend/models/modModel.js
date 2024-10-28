@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Usuario from './usuarioModel.js'
 import Evento from "./eventoModel.js";
 import Panorama from "./panoramaModel.js";
 const modSchema = new mongoose.Schema({

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Usuario from './usuarioModel.js'
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -48,7 +50,11 @@ const panoramaSchema = new mongoose.Schema({
     status_panorama: {
         type: String,
         required: true
-      },
+    },
+    precio_panorama: {
+    type: String,
+    default: 'gratis'
+    },
     img_panorama: [
         {
             type: String, 
