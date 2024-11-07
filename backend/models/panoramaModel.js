@@ -30,6 +30,10 @@ const panoramaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    direccion_panorama: {
+        type: String,
+        required: true
+    },
     ubicacion_ciudad_panorama: {
         type: String,
         required: true

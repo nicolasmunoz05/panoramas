@@ -28,6 +28,10 @@ const eventoSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    direccion_evento: {
+      type: String,
+      required: true
+    },
     ubicacion_ciudad_evento: {
       type: String,
       required: true
