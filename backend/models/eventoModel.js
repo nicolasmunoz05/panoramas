@@ -47,7 +47,7 @@ const eventoSchema = new mongoose.Schema({
     },
     status_evento: {
       type: String,
-      required: true
+      default: 'inactivo',
     },
     hora_inicio_evento: {
       type: String,
@@ -75,6 +75,10 @@ const eventoSchema = new mongoose.Schema({
       default: 'gratis'
     },
     visitas_evento:{
+      type: Number,
+      default: 0
+    },
+    edad_requerida_evento:{
       type: Number,
       default: 0
     },

@@ -200,7 +200,7 @@ export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
         const { 
-            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento, img_toBorrar 
+            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento,edad_requerida_evento, img_toBorrar 
         } = req.body;
 
         const evento = await Evento.findById(id);
@@ -209,7 +209,7 @@ export const editarEvento = async (req, res) => {
         }
 
         const updateData = { 
-            titulo_evento, descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento
+            titulo_evento, descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, edad_requerida_evento, visitas_evento
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
