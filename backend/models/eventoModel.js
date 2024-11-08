@@ -74,6 +74,10 @@ const eventoSchema = new mongoose.Schema({
       type: String,
       default: 'gratis'
     },
+    visitas_evento:{
+      type: Number,
+      default: 0
+    },
     img_evento: [
       {
           type: String, 

@@ -79,7 +79,7 @@ const borrarImagen_usuario = async (id) => {
 export const editarUsuario = async (req, res) => {
     try {
       const { id } = req.params;
-      const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
+      const { nombre_usuario, contrasena_usuario, rol_usuario, fecha_nacimiento_usuario, telefono_usuario, email_usuario, fecha_creacion_usuario } = req.body;
       const usuario = await Usuario.findOne({ _id: id });
   
       if (!usuario) {
@@ -87,15 +87,12 @@ export const editarUsuario = async (req, res) => {
       }
   
       let update_data = {
-        nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario
+        nombre_usuario, contrasena_usuario, rol_usuario,fecha_nacimiento_usuario, telefono_usuario, email_usuario, fecha_creacion_usuario
       };
   
       if (req.file) {
-        // Usar la función setImgUrl del modelo para actualizar la imagen
         usuario.setImgUrl(req.file.filename);
         update_data.img_usuario = usuario.img_usuario;
-  
-        // Eliminar la imagen anterior
         await borrarImagen_usuario(usuario._id);
       }
   
@@ -107,7 +104,7 @@ export const editarUsuario = async (req, res) => {
     }
   };
 
-//funcion para borrar usuario, del
+//funcion para borrar usuario
 export const borrarUsuario = async (req, res) => {
     try {
         const { id } = req.params;

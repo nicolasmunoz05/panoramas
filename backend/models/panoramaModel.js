@@ -56,8 +56,12 @@ const panoramaSchema = new mongoose.Schema({
         required: true
     },
     precio_panorama: {
-    type: String,
-    default: 'gratis'
+        type: String,
+        default: 'gratis'
+    },
+    visitas_panorama: {
+        type: Number,
+        default: 0
     },
     img_panorama: [
         {

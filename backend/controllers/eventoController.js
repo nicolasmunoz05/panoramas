@@ -53,7 +53,7 @@ export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
         const { 
-            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, img_toBorrar 
+            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento, img_toBorrar 
         } = req.body;
 
         const evento = await Evento.findById(id);
@@ -62,7 +62,7 @@ export const editarEvento = async (req, res) => {
         }
 
         const updateData = { 
-            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento
+            titulo_evento, descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
@@ -201,3 +201,18 @@ export const filtrarPorFechaEvento = async (req, res) => {
         res.status (500).json({ message: error.message }); 
     }
 }
+
+// funcion de eventos pendientes
+
+export const filtrarPorPendienteEvento = async (req, res) => {
+    try {
+        const data = await Evento.find({
+            aceptacion_evento: "pendiente",
+            status_evento: { $ne: "terminado" }
+        }).sort({ fecha_inicio_evento: -1 });
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -15,6 +15,14 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     default: 'user'
   },
+  fecha_nacimiento_usuario: {
+    type: Date,
+    required: true
+  },
+  telefono_usuario: {
+    type: String,
+    required: true
+  },
   email_usuario: {
     type: String,
     required: true

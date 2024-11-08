@@ -60,7 +60,7 @@ export const editarPanorama = async (req, res) => {
     try {
         const { id } = req.params;
         const { 
-            titulo_panorama,descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, img_toBorrar 
+            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama, img_toBorrar 
         } = req.body;
 
         const panorama = await Panorama.findById(id);
@@ -69,7 +69,7 @@ export const editarPanorama = async (req, res) => {
         }
 
         const updateData = { 
-            titulo_panorama,descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama
+            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
@@ -200,7 +200,7 @@ export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
         const { 
-            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, img_toBorrar 
+            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento, img_toBorrar 
         } = req.body;
 
         const evento = await Evento.findById(id);
@@ -209,7 +209,7 @@ export const editarEvento = async (req, res) => {
         }
 
         const updateData = { 
-            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento
+            titulo_evento, descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, visitas_evento
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
@@ -256,7 +256,6 @@ export const editarEvento = async (req, res) => {
         res.status(500).json({ message: "Error interno del servidor" });
     }
 };
-
 
 // funcion para borrar la imagen, se usa dentro de la funcion borrar evento
 const borrarImagen_evento = async(id)=>{
@@ -349,6 +348,20 @@ export const filtrarPorFechaEvento = async (req, res) => {
         res.status (500).json({ message: error.message }); 
     }
 }
+// funcion de eventos pendientes
+
+export const filtrarPorPendienteEvento = async (req, res) => {
+    try {
+        const data = await Evento.find({
+            aceptacion_evento: "pendiente",
+            status_evento: { $ne: "terminado" }
+        }).sort({ fecha_inicio_evento: -1 });
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 //FUNCION DE CATEGORIAS
 // funcion para crear el categoria
@@ -478,7 +491,7 @@ const borrarImagen_usuario = async (id) => {
 export const editarUsuario = async (req, res) => {
     try {
       const { id } = req.params;
-      const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
+      const { nombre_usuario, contrasena_usuario, rol_usuario, fecha_nacimiento_usuario, telefono_usuario, email_usuario, fecha_creacion_usuario } = req.body;
       const usuario = await Usuario.findOne({ _id: id });
   
       if (!usuario) {
@@ -486,15 +499,12 @@ export const editarUsuario = async (req, res) => {
       }
   
       let update_data = {
-        nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario
+        nombre_usuario, contrasena_usuario, rol_usuario,fecha_nacimiento_usuario, telefono_usuario, email_usuario, fecha_creacion_usuario
       };
   
       if (req.file) {
-        // Usar la función setImgUrl del modelo para actualizar la imagen
         usuario.setImgUrl(req.file.filename);
         update_data.img_usuario = usuario.img_usuario;
-  
-        // Eliminar la imagen anterior
         await borrarImagen_usuario(usuario._id);
       }
   
@@ -505,7 +515,7 @@ export const editarUsuario = async (req, res) => {
       res.status(500).json({ message: 'Error actualizando el usuario', error: error.message });
     }
   };
-
+  
 //funcion para borrar usuario
 export const borrarUsuario = async (req, res) => {
     try {
