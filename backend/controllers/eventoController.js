@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-e// funcion para crear el evento, post
+// funcion para crear el evento, post
 
 export const crearEvento = async (req, res) => {
     try {

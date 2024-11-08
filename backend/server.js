@@ -11,6 +11,7 @@ import panoramaRoutes from "./routes/panoramaRoutes.js";
 import categoriaRoutes from "./routes/categoriaRoutes.js";
 import modRoutes from "./routes/modRoutes.js";
 import longinRoutes from "./routes/loginRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 // import placeRoutes from "./routes/placeRoutes.js";
 
 dotenv.config();
@@ -29,7 +30,7 @@ app.use("/evento", eventoRoutes);
 app.use("/usuario", usuarioRoutes);
 
 app.use("/panorama", panoramaRoutes);
-
+app.use("/admin", adminRoutes);
 app.use("/categoria", categoriaRoutes);
 app.use("/mod", modRoutes);
 // app.use('/places', placeRoutes);
