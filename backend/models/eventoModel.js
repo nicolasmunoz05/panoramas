@@ -58,8 +58,8 @@ const eventoSchema = new mongoose.Schema({
       required: true
     },
     aceptacion_evento: {
-      type: Boolean,
-      default: null
+      type: String,
+      default: 'pendiente',
     },
     categoria_evento: {
       type: String,

@@ -139,6 +139,7 @@ const borrarImagen_panorama = async(id)=>{
         };
     };
 }
+
 // funcion para borrar el panorama
 export const borrarPanorama = async (req, res) => {
     try {
@@ -194,17 +195,68 @@ export const encontrarEvento = async (req, res) => {
         res.status(500).json({ message: error.message }); 
     }
 };
-//editar malo aun, permite editar todo menos las imagenes
+//funcion editar el evento
 export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
-        const { titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento,descripcion_breve_evento,direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento, precio_evento } = req.body;
-        const data = await Evento.updateOne({_id:id}, { $set: {titulo_evento, fecha_inicio_evento, fecha_termino_evento, descripcion_evento, descripcion_breve_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, hora_inicio_evento, hora_termino_evento, aceptacion_evento, url_img_evento, categoria_evento, precio_evento }}); 
-        res.json(data); 
+        const { 
+            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento, img_toBorrar 
+        } = req.body;
+
+        const evento = await Evento.findById(id);
+        if (!evento) {
+            return res.status(404).json({ message: 'Evento no encontrado' });
+        }
+
+        const updateData = { 
+            titulo_evento,descripcion_evento, descripcion_breve_evento, dias_evento, horario_inicio_evento, horario_termino_evento, direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento, ubicacion_comuna_evento, creador_evento, status_evento, precio_evento
+        };
+
+        if (img_toBorrar && img_toBorrar.length > 0) {
+            evento.img_evento = (evento.img_evento || []).filter(img => {
+                if (img) {
+                    const imageName = img.split('/').pop(); 
+                    if (img_toBorrar.includes(imageName)) {
+                        const imagePath = path.join(__dirname, '..', 'uploads', 'eventos', imageName);
+                        fs.unlink(imagePath, (err) => {
+                            if (err) {
+                                console.error(`Error al borrar la imagen: ${imagePath}`, err);
+                            } else {
+                                console.log(`Imagen borrada: ${imagePath}`);
+                            }
+                        });
+                        return false; 
+                    }
+                }
+                return true; 
+            });
+        }
+
+        let allImageFilenames = (evento.img_evento || [])
+            .filter(url => url != null)
+            .map(url => url.split('/').pop());
+
+        if (req.files && req.files.length > 0) {
+            const newImageFilenames = req.files.map(file => file.filename);
+            allImageFilenames = [...allImageFilenames, ...newImageFilenames];
+        }
+
+        evento.setImgUrl(allImageFilenames);
+        updateData.img_evento = evento.img_evento;
+
+        const updatedEvento = await Evento.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedEvento) {
+            return res.status(404).json({ message: "No se pudo actualizar el evento" });
+        }
+        
+        res.json({ message: "Evento actualizado con éxito", data: updatedEvento });
+        
     } catch (error) {
-        res.status(500).json({ message: error.message }); 
+        console.error(error);
+        res.status(500).json({ message: "Error interno del servidor" });
     }
-};  
+};
+
 
 // funcion para borrar la imagen, se usa dentro de la funcion borrar evento
 const borrarImagen_evento = async(id)=>{
@@ -252,7 +304,7 @@ export const ordenarEvento = async (req, res) => {
         const data = await Evento.find({
             fecha_inicio_evento: { $gte: hoy },
             fecha_termino_evento: { $lte: fechaLimite },
-            aceptacion_evento: true,
+            aceptacion_evento: "aceptado",
             status_evento: { $ne: "terminado" }
         }).sort({ fecha_inicio_evento: -1 });
 
@@ -264,13 +316,13 @@ export const ordenarEvento = async (req, res) => {
 
 // funcion para filtrar evento por categoria
 
-export const filtrarPorCategoria = async (req, res) => {
+export const filtrarPorCategoriaEvento = async (req, res) => {
     try {
         const { categoria } = req.params;
 
         const data = await Evento.find({
             categoria_evento: categoria,
-            aceptacion_evento: true,
+            aceptacion_evento: "aceptado",
             status_evento: { $ne: "terminado" }
         }).sort({ fecha_inicio_evento: -1 });
 
@@ -282,13 +334,13 @@ export const filtrarPorCategoria = async (req, res) => {
 
 // funcion para filtrar evento por fecha
 
-export const filtrarPorFecha = async (req, res) => {
+export const filtrarPorFechaEvento = async (req, res) => {
     try {
         const { fecha } = req.params;
         const fecha_formato = new Date(fecha);
         const data = await Evento.find({
             fecha_inicio_evento: { $gte: fecha_formato },
-            aceptacion_evento: true,
+            aceptacion_evento: "aceptado",
             status_evento: { $ne: "terminado" }
         }).sort({ fecha_inicio_evento: -1 });
         res.json(data);
@@ -423,33 +475,36 @@ const borrarImagen_usuario = async (id) => {
 };
 
 //funcion para editar usuario
-//malo aun editar
 export const editarUsuario = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
-        const usuario = await Usuario.findById(id);
-
-        if (!usuario) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
-        }
-
-        let update_data = { 
-            nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario 
-        };
-
-        if (req.file) {
-            usuario.setImgUrl(req.file.filename);
-            update_data.img_usuario = usuario.img_usuario;
-            await borrarImagen_usuario(id);
-        }
-        
-        const data = await Usuario.findByIdAndUpdate(id, update_data, { new: true });
-        res.json(data);
+      const { id } = req.params;
+      const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
+      const usuario = await Usuario.findOne({ _id: id });
+  
+      if (!usuario) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+  
+      let update_data = {
+        nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario
+      };
+  
+      if (req.file) {
+        // Usar la función setImgUrl del modelo para actualizar la imagen
+        usuario.setImgUrl(req.file.filename);
+        update_data.img_usuario = usuario.img_usuario;
+  
+        // Eliminar la imagen anterior
+        await borrarImagen_usuario(usuario._id);
+      }
+  
+      const updatedData = await Usuario.findByIdAndUpdate(id, update_data, { new: true });
+      res.json(updatedData);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error('Error in editarUsuario:', error);
+      res.status(500).json({ message: 'Error actualizando el usuario', error: error.message });
     }
-};
+  };
 
 //funcion para borrar usuario
 export const borrarUsuario = async (req, res) => {

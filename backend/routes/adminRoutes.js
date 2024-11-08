@@ -1,7 +1,7 @@
 import express from "express";
 import { borrarPanorama, crearPanorama, editarPanorama, encontrarPanorama, encontrarTodoPanorama } from "../controllers/panoramaController.js";
 import { upload_panorama } from "../Middlewares/storage_panorama.js"
-import {borrarEvento, crearEvento, editarEvento, encontrarEvento, encontrarTodoEvento, ordenarEvento} from '../controllers/eventoController.js';
+import {borrarEvento, crearEvento, editarEvento, encontrarEvento, encontrarTodoEvento, ordenarEvento, filtrarPorFechaEvento, filtrarPorCategoriaEvento} from '../controllers/eventoController.js';
 import { upload_evento } from '../middlewares/storage_evento.js';
 import { borrarCategoria, crearCategoria, editarCategoria, encontrarCategoria, encontrarTodoCategoria } from "../controllers/categoriaController.js";
 import { crearUsuario, encontrarTodoUsuario, encontrarUsuario, editarUsuario, borrarUsuario } from '../controllers/usuarioController.js';
@@ -17,6 +17,8 @@ router.put('/panorama/:id',upload_panorama, editarPanorama);
 router.delete('/panorama/:id', borrarPanorama);
 //funciones evento
 router.get('/evento/ordenar', ordenarEvento);
+router.get('/evento/categoria', filtrarPorCategoriaEvento);
+router.get('/evento/fecha', filtrarPorFechaEvento);
 router.post('/evento/',upload_evento, crearEvento);
 router.get('/evento/', encontrarTodoEvento);
 router.get('/evento/:id', encontrarEvento);

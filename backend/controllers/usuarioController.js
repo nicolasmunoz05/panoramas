@@ -74,34 +74,38 @@ const borrarImagen_usuario = async (id) => {
     }
 };
 
-//funcion para editar usuario, put
-//malo aun editar
+//funcion para editar usuario
+
 export const editarUsuario = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
-        const usuario = await Usuario.findById(id);
-
-        if (!usuario) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
-        }
-
-        let update_data = { 
-            nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario 
-        };
-
-        if (req.file) {
-            usuario.setImgUrl(req.file.filename);
-            update_data.img_usuario = usuario.img_usuario;
-            await borrarImagen_usuario(id);
-        }
-        
-        const data = await Usuario.findByIdAndUpdate(id, update_data, { new: true });
-        res.json(data);
+      const { id } = req.params;
+      const { nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario } = req.body;
+      const usuario = await Usuario.findOne({ _id: id });
+  
+      if (!usuario) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+  
+      let update_data = {
+        nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario
+      };
+  
+      if (req.file) {
+        // Usar la función setImgUrl del modelo para actualizar la imagen
+        usuario.setImgUrl(req.file.filename);
+        update_data.img_usuario = usuario.img_usuario;
+  
+        // Eliminar la imagen anterior
+        await borrarImagen_usuario(usuario._id);
+      }
+  
+      const updatedData = await Usuario.findByIdAndUpdate(id, update_data, { new: true });
+      res.json(updatedData);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error('Error in editarUsuario:', error);
+      res.status(500).json({ message: 'Error actualizando el usuario', error: error.message });
     }
-};
+  };
 
 //funcion para borrar usuario, del
 export const borrarUsuario = async (req, res) => {
