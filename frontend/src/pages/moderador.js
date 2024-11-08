@@ -4,23 +4,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Navbar from "../components/navbar";
 import { getAllEvents } from "../actions/evento";
-import "../styles/moderador.css"; // Estilos específicos
-
-// Datos placeholder para publicaciones
-const publicaciones = [
-  { id: 1, titulo: "Evento 1", fecha: "01/10/2024", categoria: "Por revisar" },
-  { id: 2, titulo: "Evento 2", fecha: "05/10/2024", categoria: "Aprobados" },
-  { id: 3, titulo: "Evento 3", fecha: "10/10/2024", categoria: "Rechazados" },
-];
+import "../styles/moderador.css";
 
 const Moderador = () => {
   const dispatch = useDispatch();
-
   const { eventos } = useSelector((state) => state.eventos);
+
+  const [publicaciones, setPublicaciones] = useState([]);
 
   useEffect(() => {
     dispatch(getAllEvents());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (eventos) {
+      const eventosConCategoria = eventos.map((evento) => ({
+        ...evento,
+        categoria: "Por revisar",
+      }));
+      setPublicaciones(eventosConCategoria);
+    }
+  }, [eventos]);
 
   const [activeTab, setActiveTab] = useState("Por revisar");
 
@@ -28,7 +32,22 @@ const Moderador = () => {
     setActiveTab(tab);
   };
 
-  // Filtrar las publicaciones según la pestaña activa
+  const handleAceptar = (id) => {
+    setPublicaciones((prevPublicaciones) =>
+      prevPublicaciones.map((pub) =>
+        pub.id === id ? { ...pub, categoria: "Aprobados" } : pub
+      )
+    );
+  };
+
+  const handleRechazar = (id) => {
+    setPublicaciones((prevPublicaciones) =>
+      prevPublicaciones.map((pub) =>
+        pub.id === id ? { ...pub, categoria: "Rechazados" } : pub
+      )
+    );
+  };
+
   const filteredPublicaciones = publicaciones.filter(
     (pub) => pub.categoria === activeTab
   );
@@ -37,7 +56,6 @@ const Moderador = () => {
     <>
       <Navbar />
       <div className="moderator-dashboard">
-        {/* Pestañas para categorías */}
         <Row className="tabs">
           <Col>
             <Button
@@ -65,37 +83,48 @@ const Moderador = () => {
           </Col>
         </Row>
 
-        {/* Listado de entradas */}
-
         <div className="entries">
-          {eventos.map((evento) => (
+          {filteredPublicaciones.map((evento) => (
             <div key={evento.id} className="entry">
               <h4>{evento.titulo_evento}</h4>
               <p>
                 Fecha:{" "}
                 {evento.fecha_evento_inicio
-                  ? format(new Date(evento.fecha_evento_inicio), "dd-MM-yyyy")
+                  ? format(new Date(evento.fecha_evento_inicio), "dd-MM-yyyy ")
+                  : "Fecha no disponible "}
+                -{" "}
+                {evento.fecha_evento_termino
+                  ? format(new Date(evento.fecha_evento_termino), "dd-MM-yyyy")
                   : "Fecha no disponible"}
               </p>
-              {evento.img_evento.map((image) => (
-                <img src={image} alt="img" style={{ width: 125, height: 75 }} />
+              <p>
+                {evento.hora_inicio_evento + " - " + evento.hora_termino_evento}
+              </p>
+              <p>{evento.categoria_evento}</p>
+              <p>{evento.ubicacion_evento_ciudad}</p>
+              <p>{evento.descripcion_evento}</p>
+              <p>{"Dirección: " + evento.direccion_evento}</p>
+              <p>{"Creador: " + evento.creador_evento}</p>
+
+              {evento.img_evento.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt="img"
+                  style={{ width: 125, height: 75 }}
+                />
               ))}
 
               <div className="entry-buttons">
-                <Button variant="info">Ver Detalle</Button>
                 <Button
                   variant="success"
-                  onClick={() => {
-                    /* Aceptar lógica */
-                  }}
+                  onClick={() => handleAceptar(evento.id)}
                 >
                   Aceptar
                 </Button>
                 <Button
                   variant="danger"
-                  onClick={() => {
-                    /* Rechazar lógica */
-                  }}
+                  onClick={() => handleRechazar(evento.id)}
                 >
                   Rechazar
                 </Button>
