@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//FUNCIONES USUARIOS
+//funcion para crear usuario, post
 export const crearUsuario = async (req, res) => {
     try {
         console.log('Archivo recibido:', req.file);
@@ -26,7 +28,7 @@ export const crearUsuario = async (req, res) => {
     }
 };
 
-
+//funcion para encontrar los usuarios, get
 export const encontrarTodoUsuario = async (req, res) => {
     try {
         const data = await Usuario.find(); 
@@ -36,7 +38,7 @@ export const encontrarTodoUsuario = async (req, res) => {
     }
 };
 
-
+//funcion para encontrar usuario, get
 export const encontrarUsuario = async (req, res) => {
     try {
         const { id } = req.params; 
@@ -46,13 +48,14 @@ export const encontrarUsuario = async (req, res) => {
         res.status(500).json({ message: error.message }); 
     }
 };
-const borrarImagen = async (id) => {
+
+//funcion para borrar imagen del usuario, se usa en borrar usuario
+const borrarImagen_usuario = async (id) => {
     const usuario = await Usuario.findById(id);
     if (!usuario) {
         throw new Error('Usuario no encontrado'); 
     }
 
-    
     if (usuario.img_usuario && usuario.img_usuario.length > 0) {
         for (const img of usuario.img_usuario) {
             
@@ -70,6 +73,8 @@ const borrarImagen = async (id) => {
         }
     }
 };
+
+//funcion para editar usuario, put
 //malo aun editar
 export const editarUsuario = async (req, res) => {
     try {
@@ -82,17 +87,13 @@ export const editarUsuario = async (req, res) => {
         }
 
         let update_data = { 
-            nombre_usuario, 
-            contrasena_usuario, 
-            rol_usuario, 
-            email_usuario, 
-            fecha_creacion_usuario 
+            nombre_usuario, contrasena_usuario, rol_usuario, email_usuario, fecha_creacion_usuario 
         };
 
         if (req.file) {
             usuario.setImgUrl(req.file.filename);
             update_data.img_usuario = usuario.img_usuario;
-            await borrarImagen(id);
+            await borrarImagen_usuario(id);
         }
         
         const data = await Usuario.findByIdAndUpdate(id, update_data, { new: true });
@@ -102,11 +103,11 @@ export const editarUsuario = async (req, res) => {
     }
 };
 
-
+//funcion para borrar usuario, del
 export const borrarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        await borrarImagen(id);
+        await borrarImagen_usuario(id);
         await Usuario.findByIdAndDelete(id); 
         res.json({ message: 'Registro borrado con éxito' });
     } catch (error) {

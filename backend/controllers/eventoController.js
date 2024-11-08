@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+e// funcion para crear el evento, post
+
 export const crearEvento = async (req, res) => {
     try {
         console.log('Archivo recibido:', req.files); 
@@ -26,6 +28,7 @@ export const crearEvento = async (req, res) => {
     }
 };
 
+// funcion para encontrar todos los eventos, get
 export const encontrarTodoEvento = async (req, res) => {
     try {
         const data = await Evento.find(); 
@@ -35,7 +38,7 @@ export const encontrarTodoEvento = async (req, res) => {
     }
 };
 
-
+// funcion para encontrar el evento, get
 export const encontrarEvento = async (req, res) => {
     try {
         const { id } = req.params; 
@@ -45,7 +48,7 @@ export const encontrarEvento = async (req, res) => {
         res.status(500).json({ message: error.message }); 
     }
 };
-//editar malo aun
+//editar malo aun, permite editar todo menos las imagenes
 export const editarEvento = async (req, res) => {
     try {
         const { id } = req.params;
@@ -57,7 +60,8 @@ export const editarEvento = async (req, res) => {
     }
 };  
 
-const borrarImagen = async(id)=>{
+// funcion para borrar la imagen, se usa dentro de la funcion borrar evento
+const borrarImagen_evento = async(id)=>{
     const evento = await Evento.findById(id);
     if (!evento) {
         return res.status(404).json({ message: 'Evento no encontrado' });
@@ -79,10 +83,12 @@ const borrarImagen = async(id)=>{
         };
     };
 }
+
+// funcion para borrar el evento, del
 export const borrarEvento = async (req, res) => {
     try {
         const { id } = req.params;
-        await borrarImagen(id);
+        await borrarImagen_evento(id);
         await Evento.findByIdAndDelete(id);
         res.json('Registro Borrado con Éxito');
     }catch (error) {
@@ -90,7 +96,7 @@ export const borrarEvento = async (req, res) => {
     }
 }
 
-
+// funcion para ordenar el evento, get 
 export const ordenarEvento = async (req, res) => {
     try {
         const hoy = new Date();
@@ -109,3 +115,39 @@ export const ordenarEvento = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// funcion para filtrar evento por categoria, get
+
+export const filtrarPorCategoria = async (req, res) => {
+    try {
+        const { categoria } = req.params;
+
+        const data = await Evento.find({
+            categoria_evento: categoria,
+            aceptacion_evento: true,
+            status_evento: { $ne: "terminado" }
+        }).sort({ fecha_inicio_evento: -1 });
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// funcion para filtrar evento por fecha, get
+
+export const filtrarPorFecha = async (req, res) => {
+    try {
+        const { fecha } = req.params;
+        const fecha_formato = new Date(fecha);
+        const data = await Evento.find({
+            fecha_inicio_evento: { $gte: fecha_formato },
+            aceptacion_evento: true,
+            status_evento: { $ne: "terminado" }
+        }).sort({ fecha_inicio_evento: -1 });
+        res.json(data);
+        
+    } catch (error) { 
+        res.status (500).json({ message: error.message }); 
+    }
+}
