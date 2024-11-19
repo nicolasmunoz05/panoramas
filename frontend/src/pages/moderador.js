@@ -18,12 +18,11 @@ const Moderador = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Inicializar las publicaciones con un ID único y categoría
     if (eventos) {
       const eventosConCategoria = eventos.map((evento, index) => ({
         ...evento,
-        id: evento.id || `evento-${index}`, // Generar ID si no existe
-        categoria: "Por revisar",
+        id: evento.id || `evento-${index}`,
+        categoria: "Por revisar", // Asegurar coherencia en el valor
       }));
       setPublicaciones(eventosConCategoria);
     }
@@ -35,7 +34,6 @@ const Moderador = () => {
     setActiveTab(tab);
   };
 
-  // Función para manejar la aceptación de un evento específico
   const handleAceptar = (id) => {
     setPublicaciones((prevPublicaciones) =>
       prevPublicaciones.map((pub) =>
@@ -44,7 +42,6 @@ const Moderador = () => {
     );
   };
 
-  // Función para manejar el rechazo de un evento específico
   const handleRechazar = (id) => {
     setPublicaciones((prevPublicaciones) =>
       prevPublicaciones.map((pub) =>
@@ -53,9 +50,17 @@ const Moderador = () => {
     );
   };
 
+  const handleRestaurar = (id) => {
+    setPublicaciones((prevPublicaciones) =>
+      prevPublicaciones.map((pub) =>
+        pub.id === id ? { ...pub, categoria: "Por revisar" } : pub
+      )
+    );
+  };
+
   // Filtrar las publicaciones según la pestaña activa
   const filteredPublicaciones = publicaciones.filter(
-    (pub) => pub.categoria === activeTab
+    (pub) => pub.categoria.toLowerCase() === activeTab.toLowerCase()
   );
 
   const [showModal, setShowModal] = useState(false);
@@ -164,19 +169,31 @@ const Moderador = () => {
                   <p>{"Dirección: " + evento.direccion_evento}</p>
                   <p>{"Creador: " + evento.creador_evento}</p>
 
-                  {/* Botones */}
                   <div className="entry-buttons">
+                    {/* Botón para aceptar */}
                     <Button
                       variant="success"
                       onClick={() => handleAceptar(evento.id)}
+                      style={{ marginRight: "8px" }} // Margen derecho entre botones
                     >
                       Aceptar
                     </Button>
+
+                    {/* Botón para rechazar */}
                     <Button
                       variant="danger"
                       onClick={() => handleRechazar(evento.id)}
+                      style={{ marginRight: "8px" }} // Margen derecho entre botones
                     >
                       Rechazar
+                    </Button>
+
+                    {/* Botón para restaurar */}
+                    <Button
+                      variant="warning"
+                      onClick={() => handleRestaurar(evento.id)}
+                    >
+                      Restaurar
                     </Button>
                   </div>
                 </div>

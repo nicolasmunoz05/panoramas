@@ -1,0 +1,94 @@
+.about-page {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    padding: 20px;
+  }
+  
+  .about-header {
+    text-align: center;
+    background-color: #e0f7fa;
+    padding: 30px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .about-header h1 {
+    font-size: 2.5em;
+    color: #00796b;
+  }
+  
+  .about-header p {
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  .about-team {
+    margin-bottom: 30px;
+  }
+  
+  .team-members {
+    display: flex;
+    justify-content: space-around; /* Espaciado entre miembros */
+    flex-wrap: wrap; /* Para ajustar en pantallas pequeñas */
+    gap: 20px; /* Espacio entre los contenedores */
+  }
+  
+  .team-member {
+    text-align: center; /* Centra texto e imagen */
+    width: 150px; /* Tamaño del contenedor */
+  }
+  
+  .team-photo {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%; /* Opcional: imagen circular */
+    margin-bottom: 10px; /* Espacio entre la foto y el texto */
+  }
+  
+  h3 {
+    font-size: 1.2em;
+    margin: 0; /* Espacio mínimo */
+    color: #333; /* Color del texto */
+  }
+  
+  p {
+    font-size: 0.9em;
+    color: #666; /* Color secundario */
+    margin: 5px 0 0; /* Espacio superior */
+  }
+    
+  .about-project,
+  .about-technologies,
+  .about-vision {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .about-project h2,
+  .about-technologies h2,
+  .about-vision h2 {
+    color: #00796b;
+    margin-bottom: 10px;
+  }
+  
+  .about-project p,
+  .about-vision p {
+    font-size: 1em;
+    color: #555;
+  }
+  
+  .about-technologies ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .about-technologies li {
+    font-size: 1em;
+    color: #333;
+    margin: 5px 0;
+  }
+  

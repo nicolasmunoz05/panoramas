@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Container, Row, Carousel } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Container, Row, Carousel } from "react-bootstrap";
 import Slider from "react-slick";
-import '../styles/home.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Navbar from '../components/navbar'; // Asegúrate de que la ruta sea correcta
-
+import Navbar from "../components/navbar"; // Asegúrate de que la ruta sea correcta
+import "../styles/home.css";
 
 const Home = () => {
   // Configuración del carrusel de noticias
@@ -20,22 +19,22 @@ const Home = () => {
         breakpoint: 768,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1
-        }
+          slidesToScroll: 1,
+        },
       },
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
     <Container fluid>
-            <Navbar />
+      <Navbar />
       {/* Header */}
       <div className="header-container">
         <h2>Bienvenido, Invitado</h2>
@@ -80,23 +79,74 @@ const Home = () => {
           </Carousel>
         </div>
         <h3>
-  Laguna del Maule
-  <h4>Complejo volcánico laguna del maule</h4>
-  <p>
-    La Laguna del Maule fue inicialmente una laguna natural ubicada sobre una zona cubierta por la lava del volcán Laguna del Maule que posteriormente fue represada para regular y asegurar el abastecimiento de riego en la cuenca del río Maule. <br /><br />
-    Provincia: Mendoza/Neuquén. Latitud: 36° 03′ 32″ S. Longitud: 70° 30′ 04″ O. <a href="#">Ver en mapa</a>
-    <br /><br />
-    <img src="/señales/Picnic.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/AcuaSki.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Canoa.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Camping.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Alojamiento.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Equitacion.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Natacion.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Nautica.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-    <img src="/señales/Pesca.png" alt="Warning Icon" style={{ width: '40px', height: '40px' }} />  &nbsp;
-  </p>
-</h3>
+          Laguna del Maule
+          <h4>Complejo volcánico laguna del maule</h4>
+          <p>
+            La Laguna del Maule fue inicialmente una laguna natural ubicada
+            sobre una zona cubierta por la lava del volcán Laguna del Maule que
+            posteriormente fue represada para regular y asegurar el
+            abastecimiento de riego en la cuenca del río Maule. <br />
+            <br />
+            Provincia: Mendoza/Neuquén. Latitud: 36° 03′ 32″ S. Longitud: 70°
+            30′ 04″ O. <a href="#">Ver en mapa</a>
+            <br />
+            <br />
+            <img
+              src="/señales/Picnic.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/AcuaSki.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Canoa.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Camping.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Alojamiento.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Equitacion.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Natacion.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Nautica.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+            <img
+              src="/señales/Pesca.png"
+              alt="Warning Icon"
+              style={{ width: "40px", height: "40px" }}
+            />{" "}
+            &nbsp;
+          </p>
+        </h3>
       </div>
 
       {/* Body - Eventos */}

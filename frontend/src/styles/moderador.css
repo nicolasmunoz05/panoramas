@@ -99,6 +99,21 @@
   .entry-buttons {
     margin-top: 15px;
   }
+
+  .entry-buttons button {
+    margin-right: 8px; /* Espaciado entre botones */
+  }
+  
+  .entry-buttons button:last-child {
+    margin-right: 0; /* Elimina el margen del último botón */
+  }
+  
+  button.btn-warning {
+    background-color: #f0ad4e; /* Color distintivo para "Restaurar" */
+    border-color: #eea236; /* Borde para consistencia */
+    color: #fff;
+  }
+  
     
   .modal-content {
     background-color: rgba(0, 0, 0, 0.85);
