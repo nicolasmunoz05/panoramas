@@ -109,6 +109,23 @@
   transition: all 0.2s ease-in-out;
 }
 
+.dropdown-item {
+  display: block !important;
+  padding: 0.75rem 1.25rem !important;
+  color: #333 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 0.95rem;
+  white-space: nowrap !important;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5 !important;
+  color: #00B3C7 !important;
+}
+
+
 /* Mostrar el menú desplegable cuando el botón tiene aria-expanded="true" */
 .nav-button[aria-expanded="true"] + .dropdown-content {
   opacity: 1;
@@ -132,23 +149,6 @@
   background-color: #00B3C7;
   border-radius: 3px;
 }
-
-.dropdown-item {
-  display: block;
-  padding: 0.75rem 1.25rem;
-  color: #333;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  font-size: 0.95rem;
-  white-space: nowrap;
-}
-
-.dropdown-item:hover {
-  background-color: #f5f5f5;
-  color: #00B3C7;
-}
-
 .profile-icon {
   width: 24px;
   height: 24px;
@@ -196,24 +196,6 @@
     justify-content: space-between;
   }
   
-  .dropdown-content {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    right: 0;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    padding: 0.5rem 0;
-    min-width: 220px;
-    z-index: 1001;
-    /* Removidas las propiedades que ocultan el menú
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    */
-    display: none; /* Usamos display none/block para simplicidad */
-  }
-  
   /* Mostrar el menú cuando está activo */
   .nav-button-container:has(button[aria-expanded="true"]) .dropdown-content,
   .nav-button-container.show .dropdown-content {
@@ -223,21 +205,6 @@
   /* Estilos específicos para el menú de regiones */
   .nav-button-container:has([aria-expanded="true"]) .dropdown-content {
     display: block;
-  }
-  
-  .dropdown-item {
-    display: block;
-    padding: 0.75rem 1.25rem;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-    font-size: 0.95rem;
-  }
-  
-  .dropdown-item:hover {
-    background-color: #f5f5f5;
-    color: #00B3C7;
   }
   
   /* Ajustes para el menú móvil */
