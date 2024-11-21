@@ -64,53 +64,90 @@
   font-size: 15px;
 }
 
-
-/*Banner principal con carrusel */
-.banner-carousel {
-  max-width: 15%;
-  display: inline-block;
-  margin-left: 5%;
-  margin-top: 1%;
-}
-.carousel-item img {
-  object-fit: cover;
-  height: 250px;
-  width: 100%;
-  border-radius:50px;
-  padding:1px;
-}  
-
-/* Estilos para las noticias */
-.carousel-container{
-  margin-inline:5%;
-  max-width: 90% !important;
-}
-
-
-/* Cuerpo, items del cuerpo */
-.carousel-container h2 {
-  margin-top: 1%;
-  color: #0076c5; 
-  font-family: Poppins;
-}
-
-
-
 .news-item {
-    text-align: center;
-    padding: 10px;
-    width: 40%; /* Mantener el tamaño reducido */
+  flex: 0 0 18%; /* Adjust for 5 items per page */
+  height:350px;
+  width:300px;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
+
 .news-image {
-  width: 100%; /* Mantener la imagen adaptada al contenedor */
-  height: auto;
+  width: 100%;
+  height: 300px;
   object-fit: cover;
   border-radius: 10px;
 }
 
 .news-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem; /* Mantener el tamaño de fuente reducido */
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
   margin-top: 5px;
   color: #333;
 }
+
+/* General styles for pagination */
+.paginated-container {
+  margin-inline: 5%;
+  max-width: 90%;
+  margin-bottom: 20px;
+}
+
+.paginated-container h2 {
+  color: #0076c5;
+  font-family: Poppins;
+  margin-bottom: 10px;
+}
+
+/* Wrapper and navigation */
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.nav-arrow {
+  background-color: #0076c5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.nav-arrow:hover {
+  transform: scale(1.1);
+  background-color: #005fa3;
+}
+
+.nav-arrow.left {
+  margin-right: 10px;
+}
+
+.nav-arrow.right {
+  margin-left: 10px;
+}
+
+/* Items container with animation */
+.items-container {
+  width:80%;
+  display: flex;
+  gap: 15px;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Smooth animation */
+.items-container > .news-item {
+  transform: translateX(0);
+}
+

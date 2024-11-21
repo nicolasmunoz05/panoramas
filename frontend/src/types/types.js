@@ -1,2 +1,4 @@
-export const types = {getEvents:'[Eventos] getallevents'} 
-
+export const types = {
+  getEvents: "[Eventos] getallevents",
+  getPanoramas: "[Panoramas] getallpanoramas",
+};
