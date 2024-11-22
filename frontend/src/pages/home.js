@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Navbar from "../components/navbar";
 import { format } from "date-fns";
 import { getAllEvents } from "../actions/evento";
@@ -61,7 +61,7 @@ const Home = () => {
       </div>
 
       {/* Eventos */}
-      <Row>
+      <>
         <div className="paginated-container">
           <br></br>
           <h2>Eventos</h2>
@@ -107,10 +107,10 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </Row>
+      </>
 
       {/* Panoramas */}
-      <Row>
+      <>
         <div className="paginated-container">
           <h2>Panoramas</h2>
           <div className="content-wrapper">
@@ -151,7 +151,7 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </Row>
+      </>
     </Container>
   );
 };
