@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Navbar from "../components/navbar";
+import { format } from "date-fns";
 import { getAllEvents } from "../actions/evento";
 import { getAllPanoramas } from "../actions/panorama";
 import "../styles/home.css";
@@ -59,7 +61,7 @@ const Home = () => {
       </div>
 
       {/* Eventos */}
-      <Row>
+      <>
         <div className="paginated-container">
           <br></br>
           <h2>Eventos</h2>
@@ -73,12 +75,27 @@ const Home = () => {
             <div className="items-container">
               {getPaginatedItems(eventos, eventPage).map((evento) => (
                 <div key={evento._id} className="news-item">
-                  <img
-                    src={evento.img_evento[0]}
-                    alt={evento.titulo_evento}
-                    className="news-image"
-                  />
-                  <p className="news-text">{evento.titulo_evento}</p>
+                  <Link to={`/description/${evento._id}`} className="item-link">
+                    <div className="date-overlay">
+                      {evento.fecha_evento_inicio
+                        ? format(
+                            new Date(evento.fecha_evento_inicio),
+                            "dd-MM-yyyy "
+                          )
+                        : "Fecha no disponible "}
+                    </div>
+                    <img
+                      src={evento.img_evento[0]}
+                      alt={evento.titulo_evento}
+                      className="news-image"
+                    />
+                    <p className="news-text">{evento.titulo_evento}</p>
+                    <p>{evento.descripcion_breve_evento}</p>
+                    <div className="item-views">
+                      <i className="fa fa-eye"></i>{" "}
+                      {evento.visualizaciones || "👁 " + 0}
+                    </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -90,10 +107,10 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </Row>
+      </>
 
       {/* Panoramas */}
-      <Row>
+      <>
         <div className="paginated-container">
           <h2>Panoramas</h2>
           <div className="content-wrapper">
@@ -106,12 +123,23 @@ const Home = () => {
             <div className="items-container">
               {getPaginatedItems(panoramas, panoramaPage).map((panorama) => (
                 <div key={panorama._id} className="news-item">
-                  <img
-                    src={panorama.img_panorama[0]}
-                    alt={panorama.titulo_panorama}
-                    className="news-image"
-                  />
-                  <p className="news-text">{panorama.titulo_panorama}</p>
+                  <Link
+                    to={`/description/${panorama._id}`}
+                    className="item-link"
+                  >
+                    <div className="date-overlay">{panorama.dias_panorama}</div>
+                    <img
+                      src={panorama.img_panorama[0]}
+                      alt={panorama.titulo_panorama}
+                      className="news-image"
+                    />
+                    <p className="news-text">{panorama.titulo_panorama}</p>
+                    <p>{panorama.descripcion_panorama}</p>
+                    <div className="item-views">
+                      <i className="fa fa-eye"></i>{" "}
+                      {panorama.visualizaciones || "👁 " + 0}
+                    </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -123,7 +151,7 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </Row>
+      </>
     </Container>
   );
 };
