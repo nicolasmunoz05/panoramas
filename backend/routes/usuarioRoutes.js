@@ -4,7 +4,7 @@ import { upload_usuario } from "../middlewares/storage_usuario.js";
 
 const router = express.Router();
 
-router.post('/', upload_usuario, crearUsuario);
+router.post('/', crearUsuario);
 router.get('/', encontrarTodoUsuario);
 router.get('/:id', encontrarUsuario);
 router.put('/:id',upload_usuario, editarUsuario);

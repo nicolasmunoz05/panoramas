@@ -8,7 +8,17 @@ const __dirname = path.dirname(__filename);
 
 //FUNCIONES USUARIOS
 //funcion para crear usuario, post
+
 export const crearUsuario = async (req, res) => {
+    try {
+        const usuario = new Usuario(req.body); 
+        const data = await usuario.save();
+        res.json(data); 
+    } catch (error) {
+        res.json({ message: error.message }); 
+    }
+};
+/*export const crearUsuario = async (req, res) => {
     try {
         console.log('Archivo recibido:', req.file);
         const imagenURL = req.file ? req.file.filename : ''; 
@@ -27,7 +37,7 @@ export const crearUsuario = async (req, res) => {
         res.status(500).json({ message: error.message }); 
     }
 };
-
+*/
 //funcion para encontrar los usuarios, get
 export const encontrarTodoUsuario = async (req, res) => {
     try {

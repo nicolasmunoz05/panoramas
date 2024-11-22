@@ -423,21 +423,11 @@ export const borrarCategoria = async (req, res) => {
 //funcion para crear usuario
 export const crearUsuario = async (req, res) => {
     try {
-        console.log('Archivo recibido:', req.file);
-        const imagenURL = req.file ? req.file.filename : ''; 
-        
-        const usuario = new Usuario({
-            ...req.body
-        });
-        
-        if (imagenURL) {
-            usuario.setImgUrl(imagenURL); 
-        }
-
-        const data = await usuario.save(); 
+        const usuario = new Usuario(req.body); 
+        const data = await usuario.save();
         res.json(data); 
     } catch (error) {
-        res.status(500).json({ message: error.message }); 
+        res.json({ message: error.message }); 
     }
 };
 
