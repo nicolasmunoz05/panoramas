@@ -1,20 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [showRegions, setShowRegions] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showCategories, setShowCategories] = useState(false); // Estado para desplegar categorías
+  const [showRegions, setShowRegions] = useState(false); // Estado para desplegar regiones
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simula el estado de sesión
+  const navigate = useNavigate();
   const location = useLocation();
 
-  // Reinicializa el estado al cambiar de ruta
-  useEffect(() => {
-    setShowMenu(false);
-    setShowRegions(false);
-    setIsMenuOpen(false);
-  }, [location]);
+  const categories = [
+    "Deporte",
+    "Cultura",
+    "Entretenimiento",
+    "Política",
+    "Economía",
+    "Tecnología",
+    "Ciencia",
+    "Salud",
+    "Medio ambiente",
+    "Educación",
+    "Música",
+    "Arte",
+    "Cine",
+    "Teatro",
+    "Danza",
+    "Relajación",
+  ];
 
   const regions = [
     "Arica y Parinacota",
@@ -23,7 +38,7 @@ const Navbar = () => {
     "Atacama",
     "Coquimbo",
     "Valparaíso",
-    "Metropolitana",
+    "Región Metropolitana",
     "O'Higgins",
     "Maule",
     "Ñuble",
@@ -35,8 +50,22 @@ const Navbar = () => {
     "Magallanes",
   ];
 
+  useEffect(() => {
+    setShowMenu(false);
+    setShowFilters(false);
+    setIsMenuOpen(false);
+  }, [location]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handlePublishClick = () => {
+    if (!isLoggedIn) {
+      navigate("/login"); // Redirige al login si no hay sesión activa
+    } else {
+      navigate("/publicar");
+    }
   };
 
   return (
@@ -44,7 +73,7 @@ const Navbar = () => {
       <nav className="main-navbar">
         <div className="navbar-content">
           <div className="navbar-left">
-            <div className="menu-icon" onClick={toggleMenu}>
+            <div className="menu-icon" onClick={() => setShowFilters(!showFilters)}>
               <span></span>
               <span></span>
               <span></span>
@@ -60,37 +89,9 @@ const Navbar = () => {
               Sobre nosotros
             </Link>
 
-            <Link to="/publicar" className="nav-button">
+            <button className="nav-button" onClick={handlePublishClick}>
               Publica con nosotros
-            </Link>
-
-            <div className="nav-button-container">
-              <button
-                className="nav-button"
-                onClick={() => setShowRegions(!showRegions)}
-                aria-expanded={showRegions}
-              >
-                Región
-                <svg
-                  className="chevron-icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-              {showRegions && (
-                <div className="dropdown-content">
-                  {regions.map((region, index) => (
-                    <div key={index} className="dropdown-item">
-                      {region}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            </button>
 
             <div className="nav-button-container">
               <button
@@ -122,6 +123,56 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      {showFilters && (
+        <div className="sidebar">
+          <h3>Filtros</h3>
+
+          {/* Categorías */}
+          <div className="filter-section">
+            <strong
+              className="clickable-header"
+              onClick={() => setShowCategories(!showCategories)}
+            >
+              Categorías:
+            </strong>
+            {showCategories && (
+              <ul>
+                {categories.map((category, index) => (
+                  <li key={index}>{category}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Regiones */}
+          <div className="filter-section">
+            <strong
+              className="clickable-header"
+              onClick={() => setShowRegions(!showRegions)}
+            >
+              Regiones:
+            </strong>
+            {showRegions && (
+              <ul>
+                {regions.map((region, index) => (
+                  <li key={index}>{region}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Tipo de publicación */}
+          <div className="filter-section">
+            <strong>Tipo de publicación:</strong>
+            <ul>
+              <li>Panoramas</li>
+              <li>Eventos</li>
+              <li>Favoritos</li>
+            </ul>
+          </div>
+        </div>
+      )}
       <div style={{ height: "64px" }}></div>
     </>
   );

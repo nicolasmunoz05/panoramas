@@ -1,59 +1,57 @@
-/* navbar.css */
-.main-navbar {
-  width: 100%;
-  background-color: #00B3C7;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  padding: 0.75rem 0;
-  color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* General styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-.navbar-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
+.main-navbar {
+  width: 100%;
+  height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 1rem;
+  background-color: #00B3C7;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 2rem;
 }
 
 .menu-icon {
-  width: 30px;
-  height: 24px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  cursor: pointer;
-  padding: 4px 0;
+  width: 24px;
+  height: 18px;
 }
 
 .menu-icon span {
+  display: block;
   width: 100%;
-  height: 2px;
-  background-color: white;
-  transition: all 0.3s ease;
+  height: 3px;
+  background-color: #fff;
 }
 
 .navbar-brand-center {
-  font-size: 2rem;
-  color: white;
-  text-decoration: none;
+  font-size: 1.5rem;
   font-weight: bold;
-  letter-spacing: 0.5px;
-}
-
-.navbar-brand-center:hover {
-  color: white;
   text-decoration: none;
+  color: #fff;
 }
 
 .nav-buttons {
@@ -63,157 +61,168 @@
 }
 
 .nav-button {
-  padding: 0.625rem 1.25rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #fff;
   font-size: 1rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
   text-decoration: none;
-  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .nav-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.nav-button-container {
-  position: relative;
-  display: inline-block; /* Agregado para mejorar el posicionamiento */
+  color: #fff;
 }
 
 .profile-button {
-  padding: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Estilos mejorados para el menú desplegable */
-.dropdown-content {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 0.5rem 0;
-  min-width: 220px;
-  z-index: 1001;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.2s ease-in-out;
-}
-
-.dropdown-item {
-  display: block !important;
-  padding: 0.75rem 1.25rem !important;
-  color: #333 !important;
-  text-decoration: none !important;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  font-size: 0.95rem;
-  white-space: nowrap !important;
-}
-
-.dropdown-item:hover {
-  background-color: #f5f5f5 !important;
-  color: #00B3C7 !important;
-}
-
-
-/* Mostrar el menú desplegable cuando el botón tiene aria-expanded="true" */
-.nav-button[aria-expanded="true"] + .dropdown-content {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-/* Estilos específicos para el menú de regiones */
-.nav-button-container:has(button:contains("Región")) .dropdown-content {
-  max-height: 400px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #00B3C7 #f5f5f5;
-}
-
-.nav-button-container:has(button:contains("Región")) .dropdown-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.nav-button-container:has(button:contains("Región")) .dropdown-content::-webkit-scrollbar-thumb {
-  background-color: #00B3C7;
-  border-radius: 3px;
-}
 .profile-icon {
   width: 24px;
   height: 24px;
-  color: white;
 }
 
-.chevron-icon {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
+.dropdown-content {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  z-index: 2000;
 }
 
-.nav-button[aria-expanded="true"] .chevron-icon {
-  transform: rotate(180deg);
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #333;
+  display: block;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Media queries mejoradas */
+.dropdown-item:hover {
+  background-color: #00B3C7;
+  color: #fff;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 64px);
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  z-index: 1500;
+  overflow-y: auto;
+}
+
+.sidebar h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+  color: #333;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.sidebar ul li:hover {
+  color: #00B3C7;
+}
+
+/* Button styles */
+.region-button {
+  display: block;
+  width: 100%;
+  background-color: #00B3C7;
+  color: #fff;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  margin: 1rem 0;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.region-button:hover {
+  background-color: #007B93;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .navbar-content {
-    padding: 0 1rem;
-  }
-  
-  .navbar-brand-center {
-    font-size: 1.5rem;
-  }
-  
   .nav-buttons {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: #00B3C7;
-    padding: 1rem;
-    flex-direction: column;
-    gap: 0.5rem;
     display: none;
   }
-  
+
   .nav-buttons.active {
     display: flex;
-  }
-  
-  .nav-button {
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    right: 0;
+    background-color: #00B3C7;
     width: 100%;
-    justify-content: space-between;
+    padding: 1rem 0;
+  }
+
+  .nav-button {
+    padding: 0.8rem 1rem;
+    text-align: center;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+  .categories-dropdown {
+    left: 50%;
+    transform: translateX(-50%);
   }
   
-  /* Mostrar el menú cuando está activo */
-  .nav-button-container:has(button[aria-expanded="true"]) .dropdown-content,
-  .nav-button-container.show .dropdown-content {
-    display: block;
+  .regions-dropdown {
+    left: 50%;
+    transform: translateX(-50%);
   }
-  
-  /* Estilos específicos para el menú de regiones */
-  .nav-button-container:has([aria-expanded="true"]) .dropdown-content {
-    display: block;
+  .clickable-header {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
   }
-  
-  /* Ajustes para el menú móvil */
-  @media (max-width: 768px) {
-    .dropdown-content {
-      position: static;
-      width: 100%;
-      box-shadow: none;
-      margin-top: 0.5rem;
-    }
+  .clickable-header:hover {
+    color: #0056b3;
   }
 }
