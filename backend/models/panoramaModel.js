@@ -15,8 +15,7 @@ const panoramaSchema = new mongoose.Schema({
         required: true
     },
     descripcion_breve_panorama: {
-        type: String,
-        required: true
+        type: String
     },
     dias_panorama: {
         type: String,
@@ -62,6 +61,10 @@ const panoramaSchema = new mongoose.Schema({
     visitas_panorama: {
         type: Number,
         default: 0
+    },
+    web_panorama: {
+        type: String,
+        default: null
     },
     img_panorama: [
         {
