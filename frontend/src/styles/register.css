@@ -1,0 +1,97 @@
+/* Contenedor principal */
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #4facfe, #00f2fe); /* Fondo degradado */
+    padding: 1rem;
+  }
+  
+  /* Estilo del formulario */
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white; /* Fondo blanco para destacar el formulario */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  /* Título del formulario */
+  .register-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Etiquetas */
+  .register-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    width: 100%;
+  }
+  
+  /* Inputs */
+  .register-input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    transition: border-color 0.3s;
+  }
+  
+  .register-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+  
+  .register-input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Botón */
+  .register-button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .register-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  /* Botón deshabilitado */
+  .register-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Ajuste de tamaño en pantallas pequeñas */
+  @media (max-width: 768px) {
+    .register-form {
+        padding: 1.5rem;
+    }
+  
+    .register-button {
+        font-size: 1rem;
+    }
+  }
+  

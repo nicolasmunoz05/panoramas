@@ -5,6 +5,9 @@ import Moderador from "./pages/moderador";
 import Description from "./pages/description";
 import Login from "./pages/login";
 import About from "./pages/about";
+import Register from "./pages/register";
+import PublicarEvent from "./pages/publicar";
+import ForgotPassword from "./pages/forgotPassword";
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
         <Route path="/description/:id" element={<Description />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/publicar" element={<PublicarEvent/>} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );
