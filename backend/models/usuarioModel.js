@@ -33,8 +33,7 @@ const usuarioSchema = new mongoose.Schema({
   },
   img_usuario: [
     {
-      type: String,
-      required: true
+      type: String
     }
   ]
 }, { versionKey: false });

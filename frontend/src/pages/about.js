@@ -19,7 +19,7 @@ const About = () => {
           <div className="team-members">
             <div className="team-member">
               <img
-                src="https://via.placeholder.com/150"
+                src="../JuanMV.png"
                 alt="Integrante 1"
                 className="team-photo"
               />

@@ -80,6 +80,8 @@
 
 /* General styles for items */
 .news-item {
+  width: 322px;
+  height: 395px;
   position: relative;
   text-align: center;
   padding: 10px;
@@ -90,16 +92,28 @@
 
 .news-image {
   width:300px;
-  height: 250px;
+  height: 280px;
   object-fit:fill;
   border-radius: 10px;
+  background-color: #f0f0f0; /* Fondo gris para las imágenes faltantes */
+
 }
 
 .news-text {
   font-family: "Poppins", sans-serif;
   font-size: 0.9rem;
-  margin-top: 5px;
+  margin-top: 15px;
+  margin-bottom: 0px;
   color: #333;
+}
+
+.clamped-text {
+  display: -webkit-box; /* Necesario para activar line-clamp */
+  -webkit-line-clamp: 2; /* Limita a 2 líneas */
+  -webkit-box-orient: vertical; /* Define la orientación */
+  overflow: hidden; /* Oculta el texto excedente */
+  text-overflow: ellipsis; /* Añade "..." al final del texto */
+  white-space: normal; /* Permite el uso de varias líneas */
 }
 
 /* General styles for pagination */
@@ -112,7 +126,6 @@
 .paginated-container h2 {
   color: #0076c5;
   font-family: Poppins;
-  margin-bottom: 10px;
 }
 
 /* Wrapper and navigation */

@@ -60,7 +60,7 @@ export const editarPanorama = async (req, res) => {
     try {
         const { id } = req.params;
         const { 
-            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama, img_toBorrar 
+            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama, web_panorama, img_toBorrar 
         } = req.body;
 
         const panorama = await Panorama.findById(id);
@@ -69,7 +69,7 @@ export const editarPanorama = async (req, res) => {
         }
 
         const updateData = { 
-            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama
+            titulo_panorama, descripcion_panorama, descripcion_breve_panorama, dias_panorama, horario_inicio_panorama, horario_termino_panorama, direccion_panorama, ubicacion_ciudad_panorama, ubicacion_region_panorama, ubicacion_comuna_panorama, creador_panorama, status_panorama, precio_panorama, visitas_panorama, web_panorama
         };
 
         if (img_toBorrar && img_toBorrar.length > 0) {
@@ -423,21 +423,11 @@ export const borrarCategoria = async (req, res) => {
 //funcion para crear usuario
 export const crearUsuario = async (req, res) => {
     try {
-        console.log('Archivo recibido:', req.file);
-        const imagenURL = req.file ? req.file.filename : ''; 
-        
-        const usuario = new Usuario({
-            ...req.body
-        });
-        
-        if (imagenURL) {
-            usuario.setImgUrl(imagenURL); 
-        }
-
-        const data = await usuario.save(); 
+        const usuario = new Usuario(req.body); 
+        const data = await usuario.save();
         res.json(data); 
     } catch (error) {
-        res.status(500).json({ message: error.message }); 
+        res.json({ message: error.message }); 
     }
 };
 

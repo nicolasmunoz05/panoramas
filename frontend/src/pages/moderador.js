@@ -3,77 +3,65 @@ import { Button, Row, Col, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Navbar from "../components/navbar";
-import { getAllEvents } from "../actions/evento";
+import { getAllEvents, eventoEdited, eventoNew } from "../actions/evento";
+
 import "../styles/moderador.css";
 
 const Moderador = () => {
   const dispatch = useDispatch();
   const { eventos } = useSelector((state) => state.eventos);
 
-  // Estado local para las publicaciones
-  const [publicaciones, setPublicaciones] = useState([]);
+  // Estado local para controlar la pestaña activa
+  const [activeTab, setActiveTab] = useState("Por revisar");
 
+  // Cargar eventos al inicializar
   useEffect(() => {
     dispatch(getAllEvents());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (eventos) {
-      const eventosConCategoria = eventos.map((evento, index) => ({
-        ...evento,
-        id: evento.id || `evento-${index}`,
-        categoria: "Por revisar", // Asegurar coherencia en el valor
-      }));
-      setPublicaciones(eventosConCategoria);
-    }
-  }, [eventos]);
-
-  const [activeTab, setActiveTab] = useState("Por revisar");
-
+  // Manejo de pestañas
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleAceptar = (id) => {
-    setPublicaciones((prevPublicaciones) =>
-      prevPublicaciones.map((pub) =>
-        pub.id === id ? { ...pub, categoria: "Aprobados" } : pub
-      )
-    );
+  // Función para manejar la actualización de estado en la base de datos
+  const updateEventoEstado = (id, estado) => {
+    const evento = eventos.find((e) => e._id === id);
+    if (evento) {
+      dispatch(
+        eventoEdited({
+          ...evento,
+          aceptacion_evento: estado,
+        })
+      );
+    }
   };
 
-  const handleRechazar = (id) => {
-    setPublicaciones((prevPublicaciones) =>
-      prevPublicaciones.map((pub) =>
-        pub.id === id ? { ...pub, categoria: "Rechazados" } : pub
-      )
-    );
-  };
+  const handleAceptar = (id) => updateEventoEstado(id, "aceptado");
+  const handleRechazar = (id) => updateEventoEstado(id, "rechazado");
+  const handleRestaurar = (id) => updateEventoEstado(id, "pendiente");
 
-  const handleRestaurar = (id) => {
-    setPublicaciones((prevPublicaciones) =>
-      prevPublicaciones.map((pub) =>
-        pub.id === id ? { ...pub, categoria: "Por revisar" } : pub
-      )
-    );
-  };
+  // Filtrar publicaciones según la pestaña activa y el estado en la base de datos
+  const filteredPublicaciones = eventos?.filter((evento) => {
+    if (activeTab === "Por revisar")
+      return evento.aceptacion_evento === "pendiente";
+    if (activeTab === "Aprobados")
+      return evento.aceptacion_evento === "aceptado";
+    if (activeTab === "Rechazados")
+      return evento.aceptacion_evento === "rechazado";
+    return false;
+  });
 
-  // Filtrar las publicaciones según la pestaña activa
-  const filteredPublicaciones = publicaciones.filter(
-    (pub) => pub.categoria.toLowerCase() === activeTab.toLowerCase()
-  );
-
+  // Modal para visualizar imágenes
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageClick = (image) => {
-    setSelectedImage(image); // Imagen seleccionada
-    setShowModal(true); // Mostrar modal
+    setSelectedImage(image);
+    setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false); // Cerrar modal
-  };
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <>
@@ -91,8 +79,9 @@ const Moderador = () => {
           />
         </Modal.Body>
       </Modal>
-      ;
+
       <Navbar />
+
       <div className="moderator-dashboard">
         {/* Pestañas para categorías */}
         <Row className="tabs">
@@ -124,22 +113,22 @@ const Moderador = () => {
 
         {/* Listado de entradas */}
         <div className="entries">
-          {filteredPublicaciones.map((evento) => (
-            <div key={evento.id} className="entry">
+          {filteredPublicaciones?.map((evento) => (
+            <div key={evento._id} className="entry">
               <div className="entry-content">
-                {/* Imagen del evento */}
                 <div className="entry-image">
-                  {evento.img_evento.length > 0 && (
+                  {evento.img_evento?.length > 0 ? (
                     <img
-                      src={evento.img_evento[0]} // Primera imagen del array
+                      src={evento.img_evento[0]}
                       alt="Evento"
                       className="event-image"
-                      onClick={() => handleImageClick(evento.img_evento[0])} // Lógica para abrir el modal
+                      onClick={() => handleImageClick(evento.img_evento[0])}
                     />
+                  ) : (
+                    <div className="placeholder-image">Sin imagen</div>
                   )}
                 </div>
 
-                {/* Información del evento */}
                 <div className="entry-details">
                   <h4>{evento.titulo_evento}</h4>
                   <p>
@@ -149,7 +138,7 @@ const Moderador = () => {
                           new Date(evento.fecha_evento_inicio),
                           "dd-MM-yyyy "
                         )
-                      : "Fecha no disponible "}
+                      : "Fecha no disponible"}{" "}
                     -{" "}
                     {evento.fecha_evento_termino
                       ? format(
@@ -170,28 +159,25 @@ const Moderador = () => {
                   <p>{"Creador: " + evento.creador_evento}</p>
 
                   <div className="entry-buttons">
-                    {/* Botón para aceptar */}
                     <Button
                       variant="success"
-                      onClick={() => handleAceptar(evento.id)}
-                      style={{ marginRight: "8px" }} // Margen derecho entre botones
+                      onClick={() => handleAceptar(evento._id)}
+                      style={{ marginRight: "8px" }}
                     >
                       Aceptar
                     </Button>
 
-                    {/* Botón para rechazar */}
                     <Button
                       variant="danger"
-                      onClick={() => handleRechazar(evento.id)}
-                      style={{ marginRight: "8px" }} // Margen derecho entre botones
+                      onClick={() => handleRechazar(evento._id)}
+                      style={{ marginRight: "8px" }}
                     >
                       Rechazar
                     </Button>
 
-                    {/* Botón para restaurar */}
                     <Button
                       variant="warning"
-                      onClick={() => handleRestaurar(evento.id)}
+                      onClick={() => handleRestaurar(evento._id)}
                     >
                       Restaurar
                     </Button>

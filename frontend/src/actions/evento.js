@@ -15,39 +15,40 @@ export const getAllEvents = () => {
   };
 };
 
-// Agregar Evento
-//   export const productNew = (products) => {
-//   return async (dispatch) => {
-//     try {
-//       const resp = await fetchWithToken("products", products, "POST");
-//       const body = await resp.json();
+//Agregar Evento
+export const eventoNew = (eventos) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchWithToken("eventos", eventos, "POST");
+      const body = await resp.json();
+      if (body) {
+        dispatch({ type: types.eventoNew, payload: eventos });
+        // Swal.fire("Success", "Producto guardado correctamente", "success");
+      }
+    } catch (error) {
+      // Swal.fire("Error", "No se pudo guardar el producto", "error");
+    }
+  };
+};
 
-//       if (body.ok) {
-//         dispatch({ type: types.productNew, payload: products });
-//         dispatch(productsLoaded());
-//         Swal.fire("Success", "Producto guardado correctamente", "success");
-//       }
-//     } catch (error) {
-//       Swal.fire("Error", "No se pudo guardar el producto", "error");
-//     }
-//   };
-// };
+//Update
+export const eventoEdited = (eventos) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchWithToken(
+        `evento/${eventos._id}`,
+        eventos,
+        "PUT"
+      );
+      const body = await resp.json();
 
-// Update
-// export const productEdited = (products) => {
-//   return async (dispatch) => {
-//     try {
-//       const resp = await fetchWithToken(
-//         `products/${products._id}`,
-//         products,
-//         "PUT"
-//       );
-//       const body = await resp.json();
-//       if (body.ok) {
-//         dispatch(productDataToEdit(products));
-//       }
-//     } catch (error) {
-//       Swal.fire("Error", "No se pudo editar el producto", "error");
-//     }
-//   };
-// };
+      // aca debe devolver un booleano, un true o false para que la dependencia no sea de un mensaje que pueda cambiar
+      if (body.message === "Evento actualizado con éxito") {
+        dispatch({ type: types.updateEvento, payload: eventos });
+        dispatch(getAllEvents());
+      }
+    } catch (error) {
+      //Swal.fire("Error", "No se pudo editar el producto", "error");
+    }
+  };
+};

@@ -1,4 +1,7 @@
 export const types = {
-  getEvents: "[Eventos] getallevents",
+  getEvents: "[Eventos] getAllEvents",
+  addEvento: "[Eventos] addEvento",
+  updateEvento: "[Eventos] updateEvento",
+
   getPanoramas: "[Panoramas] getallpanoramas",
 };

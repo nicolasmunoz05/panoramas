@@ -12,9 +12,10 @@ const Home = () => {
   const dispatch = useDispatch();
   const { eventos } = useSelector((state) => state.eventos);
   const { panoramas } = useSelector((state) => state.panoramas);
-
   const [eventPage, setEventPage] = useState(0);
   const [panoramaPage, setPanoramaPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -43,6 +44,18 @@ const Home = () => {
   const getPaginatedItems = (items, page) =>
     items.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
 
+  // Filtrar eventos y panoramas según el término de búsqueda
+  const filteredEventos = eventos.filter(
+    (evento) =>
+      evento.titulo_evento.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      evento.descripcion_breve_evento
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  );
+  const filteredPanoramas = panoramas.filter((panorama) =>
+    panorama.titulo_panorama.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Container fluid>
       <Navbar />
@@ -56,6 +69,8 @@ const Home = () => {
             type="text"
             className="form-control"
             placeholder="Buscar eventos, panoramas..."
+            value={searchTerm} // Valor del estado
+            onChange={(e) => setSearchTerm(e.target.value)} // Actualizar estado
           />
         </div>
       </div>
@@ -73,7 +88,7 @@ const Home = () => {
               &lt;
             </button>
             <div className="items-container">
-              {getPaginatedItems(eventos, eventPage).map((evento) => (
+              {getPaginatedItems(filteredEventos, eventPage).map((evento) => (
                 <div key={evento._id} className="news-item">
                   <Link to={`/description/${evento._id}`} className="item-link">
                     <div className="date-overlay">
@@ -88,9 +103,15 @@ const Home = () => {
                       src={evento.img_evento[0]}
                       alt={evento.titulo_evento}
                       className="news-image"
+                      onError={(e) => {
+                        e.target.onerror = null; // Evita bucles infinitos
+                        e.target.src = "/path/to/placeholder-image.jpg"; // Reemplaza con la ruta de tu placeholder
+                      }}
                     />
                     <p className="news-text">{evento.titulo_evento}</p>
-                    <p>{evento.descripcion_breve_evento}</p>
+                    <p className="clamped-text">
+                      {evento.descripcion_breve_evento}
+                    </p>
                     <div className="item-views">
                       <i className="fa fa-eye"></i>{" "}
                       {evento.visualizaciones || "👁 " + 0}
@@ -121,27 +142,37 @@ const Home = () => {
               &lt;
             </button>
             <div className="items-container">
-              {getPaginatedItems(panoramas, panoramaPage).map((panorama) => (
-                <div key={panorama._id} className="news-item">
-                  <Link
-                    to={`/description/${panorama._id}`}
-                    className="item-link"
-                  >
-                    <div className="date-overlay">{panorama.dias_panorama}</div>
-                    <img
-                      src={panorama.img_panorama[0]}
-                      alt={panorama.titulo_panorama}
-                      className="news-image"
-                    />
-                    <p className="news-text">{panorama.titulo_panorama}</p>
-                    <p>{panorama.descripcion_panorama}</p>
-                    <div className="item-views">
-                      <i className="fa fa-eye"></i>{" "}
-                      {panorama.visualizaciones || "👁 " + 0}
-                    </div>
-                  </Link>
-                </div>
-              ))}
+              {getPaginatedItems(filteredPanoramas, panoramaPage).map(
+                (panorama) => (
+                  <div key={panorama._id} className="news-item">
+                    <Link
+                      to={`/description/${panorama._id}`}
+                      className="item-link"
+                    >
+                      <div className="date-overlay">
+                        {panorama.dias_panorama}
+                      </div>
+                      <img
+                        src={panorama.img_panorama[0]}
+                        alt={panorama.titulo_panorama}
+                        className="news-image"
+                        onError={(e) => {
+                          e.target.onerror = null; // Evita bucles infinitos
+                          e.target.src = "../No-Image-Placeholder.svg.png"; // Reemplaza con la ruta de tu placeholder
+                        }}
+                      />
+                      <p className="news-text">{panorama.titulo_panorama}</p>
+                      <p className="clamped-text">
+                        {panorama.descripcion_panorama}
+                      </p>
+                      <div className="item-views">
+                        <i className="fa fa-eye"></i>{" "}
+                        {panorama.visualizaciones || "👁 " + 0}
+                      </div>
+                    </Link>
+                  </div>
+                )
+              )}
             </div>
             <button
               className="nav-arrow right"

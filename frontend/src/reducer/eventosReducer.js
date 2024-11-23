@@ -10,10 +10,10 @@ const initialState = {
 
 export const eventosReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.eventoNew:
+    case types.addEvento:
       return {
         ...state,
-        eventos: [...state.eventos, action.payload],
+        addEvento: [...state.eventos, action.payload],
       };
 
     case types.getEvents:
@@ -22,7 +22,7 @@ export const eventosReducer = (state = initialState, action) => {
         eventos: [...action.payload],
       };
 
-    case types.eventoUpdate:
+    case types.updateEvento:
       return {
         ...state,
         eventosEdit: action.payload,
