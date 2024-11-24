@@ -18,6 +18,23 @@ const Home = () => {
 
   const itemsPerPage = 4;
 
+  // Componente estrella dentro de Home.js
+  const Star = ({ onToggle }) => {
+    const [isActive, setIsActive] = useState(false);
+
+    const toggleStar = () => {
+      const newState = !isActive;
+      setIsActive(newState);
+      if (onToggle) onToggle(newState);
+    };
+
+    return (
+      <span onClick={toggleStar} className={`star ${isActive ? "active" : ""}`}>
+        ★
+      </span>
+    );
+  };
+
   useEffect(() => {
     dispatch(getAllEvents());
     dispatch(getAllPanoramas());
@@ -52,13 +69,25 @@ const Home = () => {
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
   );
-  const filteredPanoramas = panoramas.filter((panorama) =>
-    panorama.titulo_panorama.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPanoramas = panoramas.filter(
+    (panorama) =>
+      panorama.titulo_panorama
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      panorama.descripcion_panorama
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
+  // Nuevo useEffect para resetear páginas
+  useEffect(() => {
+    setEventPage(0); // Resetea a la primera página de eventos
+    setPanoramaPage(0); // Resetea a la primera página de panoramas
+  }, [searchTerm]); // Cada vez que cambie el término de búsqueda
 
   return (
     <Container fluid>
       <Navbar />
+
       <div className="header-container">
         <h2> Bienvenido, Invitado</h2>
         <button type="button" className="btn-map">
@@ -77,111 +106,146 @@ const Home = () => {
 
       {/* Eventos */}
       <>
-        <div className="paginated-container">
-          <br></br>
-          <h2>Eventos</h2>
-          <div className="content-wrapper">
-            <button
-              className="nav-arrow left"
-              onClick={() => handlePageChange("eventos", "prev")}
-            >
-              &lt;
-            </button>
-            <div className="items-container">
-              {getPaginatedItems(filteredEventos, eventPage).map((evento) => (
-                <div key={evento._id} className="news-item">
-                  <Link to={`/description/${evento._id}`} className="item-link">
-                    <div className="date-overlay">
-                      {evento.fecha_evento_inicio
-                        ? format(
-                            new Date(evento.fecha_evento_inicio),
-                            "dd-MM-yyyy "
+        {filteredEventos.length > 0 && (
+          <div className="paginated-container">
+            <br />
+            <h2>Eventos</h2>
+            <div className="content-wrapper">
+              <button
+                className="nav-arrow left"
+                onClick={() => handlePageChange("eventos", "prev")}
+              >
+                &lt;
+              </button>
+              <div className="items-container">
+                {getPaginatedItems(filteredEventos, eventPage).map((evento) => (
+                  <div key={evento._id} className="news-item">
+                    <Link
+                      to={`/description/${evento._id}`}
+                      className="item-link"
+                    >
+                      <div className="date-overlay">
+                        {evento.fecha_evento_inicio
+                          ? format(
+                              new Date(evento.fecha_evento_inicio),
+                              "dd-MM-yyyy "
+                            )
+                          : "Fecha no disponible "}
+                      </div>
+                      <div className="price-overlay">
+                        {evento.precio_evento > 0
+                          ? `$${evento.precio_evento}`
+                          : evento.precio_evento}
+                      </div>
+
+                      <img
+                        src={evento.img_evento[0]}
+                        alt={evento.titulo_evento}
+                        className="news-image"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "../No-Image-Placeholder.svg.png";
+                        }}
+                      />
+                      <p className="news-text">{evento.titulo_evento}</p>
+                      <p className="clamped-text">
+                        {evento.descripcion_breve_evento}
+                      </p>
+
+                      <div className="item-views">
+                        <i className="fa fa-eye"></i>{" "}
+                        {evento.visualizaciones || "👁 " + 0}
+                      </div>
+                    </Link>
+                    <div className="star-container">
+                      <Star
+                        onToggle={(isActive) =>
+                          console.log(
+                            `${evento.titulo_evento} favorito:`,
+                            isActive
                           )
-                        : "Fecha no disponible "}
+                        }
+                      />
                     </div>
-                    <img
-                      src={evento.img_evento[0]}
-                      alt={evento.titulo_evento}
-                      className="news-image"
-                      onError={(e) => {
-                        e.target.onerror = null; // Evita bucles infinitos
-                        e.target.src = "/path/to/placeholder-image.jpg"; // Reemplaza con la ruta de tu placeholder
-                      }}
-                    />
-                    <p className="news-text">{evento.titulo_evento}</p>
-                    <p className="clamped-text">
-                      {evento.descripcion_breve_evento}
-                    </p>
-                    <div className="item-views">
-                      <i className="fa fa-eye"></i>{" "}
-                      {evento.visualizaciones || "👁 " + 0}
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
+              <button
+                className="nav-arrow right"
+                onClick={() => handlePageChange("eventos", "next")}
+              >
+                &gt;
+              </button>
             </div>
-            <button
-              className="nav-arrow right"
-              onClick={() => handlePageChange("eventos", "next")}
-            >
-              &gt;
-            </button>
           </div>
-        </div>
+        )}
       </>
 
       {/* Panoramas */}
       <>
-        <div className="paginated-container">
-          <h2>Panoramas</h2>
-          <div className="content-wrapper">
-            <button
-              className="nav-arrow left"
-              onClick={() => handlePageChange("panoramas", "prev")}
-            >
-              &lt;
-            </button>
-            <div className="items-container">
-              {getPaginatedItems(filteredPanoramas, panoramaPage).map(
-                (panorama) => (
-                  <div key={panorama._id} className="news-item">
-                    <Link
-                      to={`/description/${panorama._id}`}
-                      className="item-link"
-                    >
-                      <div className="date-overlay">
-                        {panorama.dias_panorama}
+        {/* Panoramas */}
+        {filteredPanoramas.length > 0 && (
+          <div className="paginated-container">
+            <h2>Panoramas</h2>
+            <div className="content-wrapper">
+              <button
+                className="nav-arrow left"
+                onClick={() => handlePageChange("panoramas", "prev")}
+              >
+                &lt;
+              </button>
+              <div className="items-container">
+                {getPaginatedItems(filteredPanoramas, panoramaPage).map(
+                  (panorama) => (
+                    <div key={panorama._id} className="news-item">
+                      <Link
+                        to={`/description/${panorama._id}`}
+                        className="item-link"
+                      >
+                        <div className="date-overlay">
+                          {panorama.dias_panorama}
+                        </div>
+                        <img
+                          src={panorama.img_panorama[0]}
+                          alt={panorama.titulo_panorama}
+                          className="news-image"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "../No-Image-Placeholder.svg.png";
+                          }}
+                        />
+                        <p className="news-text">{panorama.titulo_panorama}</p>
+                        <p className="clamped-text">
+                          {panorama.descripcion_panorama}
+                        </p>
+                        <div className="item-views">
+                          <i className="fa fa-eye"></i>{" "}
+                          {panorama.visualizaciones || "👁 " + 0}
+                        </div>
+                      </Link>
+                      <div className="star-container">
+                        <Star
+                          onToggle={(isActive) =>
+                            console.log(
+                              `${panorama.titulo_panorama} favorito:`,
+                              isActive
+                            )
+                          }
+                        />
                       </div>
-                      <img
-                        src={panorama.img_panorama[0]}
-                        alt={panorama.titulo_panorama}
-                        className="news-image"
-                        onError={(e) => {
-                          e.target.onerror = null; // Evita bucles infinitos
-                          e.target.src = "../No-Image-Placeholder.svg.png"; // Reemplaza con la ruta de tu placeholder
-                        }}
-                      />
-                      <p className="news-text">{panorama.titulo_panorama}</p>
-                      <p className="clamped-text">
-                        {panorama.descripcion_panorama}
-                      </p>
-                      <div className="item-views">
-                        <i className="fa fa-eye"></i>{" "}
-                        {panorama.visualizaciones || "👁 " + 0}
-                      </div>
-                    </Link>
-                  </div>
-                )
-              )}
+                    </div>
+                  )
+                )}
+              </div>
+              <button
+                className="nav-arrow right"
+                onClick={() => handlePageChange("panoramas", "next")}
+              >
+                &gt;
+              </button>
             </div>
-            <button
-              className="nav-arrow right"
-              onClick={() => handlePageChange("panoramas", "next")}
-            >
-              &gt;
-            </button>
           </div>
-        </div>
+        )}
       </>
     </Container>
   );
