@@ -16,7 +16,7 @@ const Home = () => {
   const [panoramaPage, setPanoramaPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
 
   useEffect(() => {
     dispatch(getAllEvents());
