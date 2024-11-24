@@ -41,7 +41,7 @@ const eventoSchema = new mongoose.Schema({
       required: true
     },
     creador_evento: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: Usuario,
       required: true
     },

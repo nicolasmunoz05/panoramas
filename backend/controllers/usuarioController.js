@@ -38,6 +38,33 @@ export const crearUsuario = async (req, res) => {
     }
 };
 */
+//funcion para encontrar datos del usuario por correo
+export const encontrarUsuarioCorreo = async (req, res) => {
+    const { email_usuario } = req.params; // Toma el email desde los parámetros de la URL
+    console.log("Correo recibido:", email_usuario); // Depuración
+  
+    try {
+      // Intenta buscar el usuario en la base de datos
+      const user = await Usuario.findOne({ email_usuario: email_usuario });
+      console.log("Usuario encontrado:", user); // Depuración
+  
+      if (!user) {
+        return res.status(404).json({ error: "Usuario no encontrado." });
+      }
+  
+      // Responde con el usuario encontrado
+      res.json({ message: "Usuario encontrado.", usuario: user });
+    } catch (error) {
+      console.error("Error en la búsqueda:", error); // Depuración
+      res.status(500).json({ error: "Error en el servidor." });
+    }
+  };
+  
+  
+
+
+
+
 //funcion para encontrar los usuarios, get
 export const encontrarTodoUsuario = async (req, res) => {
     try {

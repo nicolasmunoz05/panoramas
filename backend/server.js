@@ -12,6 +12,8 @@ import categoriaRoutes from "./routes/categoriaRoutes.js";
 import modRoutes from "./routes/modRoutes.js";
 import longinRoutes from "./routes/loginRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import authContRoutes from "./routes/authContRoutes.js";
+import favoritoRoutes from "./routes/favoritoRoutes.js";
 // import placeRoutes from "./routes/placeRoutes.js";
 
 dotenv.config();
@@ -36,6 +38,9 @@ app.use("/mod", modRoutes);
 // app.use('/places', placeRoutes);
 app.use("/public", express.static(`${__dirname}/uploads`));
 app.use("/login", longinRoutes);
+app.use("/auth", authContRoutes);
+app.use("/favorito", favoritoRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Opa nico");
