@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { getAllEvents } from "../actions/evento";
 import { getAllPanoramas } from "../actions/panorama";
 import "../styles/home.css";
+import Carousel from "../components/carousel.js"; // Asegúrate de que la ruta sea correcta
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -87,9 +88,9 @@ const Home = () => {
   return (
     <Container fluid>
       <Navbar />
-
       <div className="header-container">
-        <h2> Bienvenido, Invitado</h2>
+        <h2> Hola Invitado! Revise los eventos mas vistos</h2>
+
         <button type="button" className="btn-map">
           Mapa 📍
         </button>
@@ -103,6 +104,8 @@ const Home = () => {
           />
         </div>
       </div>
+      {/* Carrusel de eventos destacados */}
+      {eventos.length > 0 && <Carousel eventos={eventos.slice(0, 5)} />}
 
       {/* Eventos */}
       <>
