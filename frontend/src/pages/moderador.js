@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button, Row, Col, Modal } from "react-bootstrap";
+import { Button, Row, Col, Modal, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Navbar from "../components/navbar";
-import { getAllEvents, eventoEdited, eventoNew } from "../actions/evento";
-import {
-  getAllPanoramas,
-  panoramaEdited,
-  panoramaNew,
-} from "../actions/panorama";
+import { getAllEvents, eventoEdited } from "../actions/evento";
+import { getAllPanoramas, panoramaEdited } from "../actions/panorama";
 import "../styles/moderador.css";
 
 const Moderador = () => {
@@ -19,11 +15,9 @@ const Moderador = () => {
   // Estado local para controlar la pestaña activa
   const [activeTab, setActiveTab] = useState("Por revisar");
 
-  // Cargar eventos al inicializar
+  // Cargar datos al inicializar
   useEffect(() => {
     dispatch(getAllEvents());
-  }, [dispatch]);
-  useEffect(() => {
     dispatch(getAllPanoramas());
   }, [dispatch]);
 
@@ -60,15 +54,18 @@ const Moderador = () => {
     return false;
   });
 
-  const filteredPanoramas = panoramas?.filter((panorama) => {
-    if (activeTab === "Por revisar")
-      return panorama.aceptacion_panorama === "pendiente";
-    if (activeTab === "Aprobados")
-      return panorama.aceptacion_panorama === "aceptado";
-    if (activeTab === "Rechazados")
-      return panorama.aceptacion_panorama === "rechazado";
-    return false;
-  });
+  // Función para manejar el cambio de estado del panorama
+  const handlePanoramaStatusChange = (id, status) => {
+    const panorama = panoramas.find((p) => p._id === id);
+    if (panorama) {
+      dispatch(
+        panoramaEdited({
+          ...panorama,
+          status_panorama: status,
+        })
+      );
+    }
+  };
 
   // Modal para visualizar imágenes
   const [showModal, setShowModal] = useState(false);
@@ -127,120 +124,154 @@ const Moderador = () => {
               Rechazados
             </Button>
           </Col>
+          <Col>
+            <Button
+              variant={activeTab === "Panoramas" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Panoramas")}
+            >
+              Panoramas
+            </Button>
+          </Col>
         </Row>
 
         {/* Listado de Eventos */}
-        <div className="entries">
-          {filteredPublicaciones?.map((evento) => (
-            <div key={evento._id} className="entry">
-              <div className="entry-content">
-                <div className="entry-image">
-                  {evento.img_evento?.length > 0 ? (
-                    <img
-                      src={evento.img_evento[0]}
-                      alt="Evento"
-                      className="event-image"
-                      onClick={() => handleImageClick(evento.img_evento[0])}
-                    />
-                  ) : (
-                    <div className="placeholder-image">Sin imagen</div>
-                  )}
-                </div>
+        {(activeTab === "Por revisar" ||
+          activeTab === "Aprobados" ||
+          activeTab === "Rechazados") && (
+          <div className="entries">
+            {filteredPublicaciones?.map((evento) => (
+              <div key={evento._id} className="entry">
+                <div className="entry-content">
+                  <div className="entry-image">
+                    {evento.img_evento?.length > 0 ? (
+                      <img
+                        src={evento.img_evento[0]}
+                        alt="Evento"
+                        className="event-image"
+                        onClick={() => handleImageClick(evento.img_evento[0])}
+                      />
+                    ) : (
+                      <div className="placeholder-image">Sin imagen</div>
+                    )}
+                  </div>
 
-                <div className="entry-details">
-                  <h4>{evento.titulo_evento}</h4>
-                  <p>
-                    Fecha:{" "}
-                    {evento.fecha_evento_inicio
-                      ? format(
-                          new Date(evento.fecha_evento_inicio),
-                          "dd-MM-yyyy "
-                        )
-                      : "Fecha no disponible"}{" "}
-                    -{" "}
-                    {evento.fecha_evento_termino
-                      ? format(
-                          new Date(evento.fecha_evento_termino),
-                          "dd-MM-yyyy"
-                        )
-                      : "Fecha no disponible"}
-                  </p>
-                  <p>
-                    {evento.hora_inicio_evento +
-                      " - " +
-                      evento.hora_termino_evento}
-                  </p>
-                  <p>{evento.categoria_evento}</p>
-                  <p>{evento.ubicacion_evento_ciudad}</p>
-                  <p>{evento.descripcion_evento}</p>
-                  <p>{"Dirección: " + evento.direccion_evento}</p>
-                  <p>{"Creador: " + evento.creador_evento}</p>
+                  <div className="entry-details">
+                    <h4>{evento.titulo_evento}</h4>
+                    <p>
+                      Fecha:{" "}
+                      {evento.fecha_evento_inicio
+                        ? format(
+                            new Date(evento.fecha_evento_inicio),
+                            "dd-MM-yyyy "
+                          )
+                        : "Fecha no disponible"}{" "}
+                      -{" "}
+                      {evento.fecha_evento_termino
+                        ? format(
+                            new Date(evento.fecha_evento_termino),
+                            "dd-MM-yyyy"
+                          )
+                        : "Fecha no disponible"}
+                    </p>
+                    <p>
+                      {evento.hora_inicio_evento +
+                        " - " +
+                        evento.hora_termino_evento}
+                    </p>
+                    <p>{evento.categoria_evento}</p>
+                    <p>{evento.ubicacion_evento_ciudad}</p>
+                    <p>{evento.descripcion_evento}</p>
+                    <p>{"Dirección: " + evento.direccion_evento}</p>
+                    <p>{"Creador: " + evento.creador_evento}</p>
 
-                  <div className="entry-buttons">
-                    <Button
-                      variant="success"
-                      onClick={() => handleAceptar(evento._id)}
-                      style={{ marginRight: "8px" }}
-                    >
-                      Aceptar
-                    </Button>
+                    <div className="entry-buttons">
+                      <Button
+                        variant="success"
+                        onClick={() => handleAceptar(evento._id)}
+                        style={{ marginRight: "8px" }}
+                      >
+                        Aceptar
+                      </Button>
 
-                    <Button
-                      variant="danger"
-                      onClick={() => handleRechazar(evento._id)}
-                      style={{ marginRight: "8px" }}
-                    >
-                      Rechazar
-                    </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRechazar(evento._id)}
+                        style={{ marginRight: "8px" }}
+                      >
+                        Rechazar
+                      </Button>
 
-                    <Button
-                      variant="warning"
-                      onClick={() => handleRestaurar(evento._id)}
-                    >
-                      Restaurar
-                    </Button>
+                      <Button
+                        variant="warning"
+                        onClick={() => handleRestaurar(evento._id)}
+                      >
+                        Restaurar
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Listado de Panoramas */}
+        {activeTab === "Panoramas" && (
+          <div className="entries">
+            {panoramas.map((panorama) => (
+              <div key={panorama._id} className="entry">
+                <div className="entry-content">
+                  <div className="entry-image">
+                    {panorama.img_panorama?.length > 0 ? (
+                      <img
+                        src={panorama.img_panorama[0]}
+                        alt="Panorama"
+                        className="event-image"
+                        onClick={() =>
+                          handleImageClick(panorama.img_panorama[0])
+                        }
+                      />
+                    ) : (
+                      <div className="placeholder-image">Sin imagen</div>
+                    )}
+                  </div>
 
-        <div className="entries">
-          {filteredPublicaciones?.map((panorama) => (
-            <div key={panorama._id} className="entry">
-              <div className="entry-content">
-                <div className="entry-image">
-                  {panorama.img_panorama?.length > 0 ? (
-                    <img
-                      src={panorama.img_panorama[0]}
-                      alt="Evento"
-                      className="event-image"
-                      onClick={() => handleImageClick(panorama.img_panorama[0])}
-                    />
-                  ) : (
-                    <div className="placeholder-image">Sin imagen</div>
-                  )}
-                </div>
+                  <div className="entry-details">
+                    <h4>{panorama.titulo_panorama}</h4>
+                    <p>
+                      {panorama.horario_inicio_panorama +
+                        " - " +
+                        panorama.horario_termino_panorama}
+                    </p>
+                    <p>{panorama.ubicacion_ciudad_panorama}</p>
+                    <p>{panorama.descripcion_panorama}</p>
+                    <p>{"Dirección: " + panorama.direccion_panorama}</p>
+                    <p>{"Creador: " + panorama.creador_panorama}</p>
 
-                <div className="entry-details">
-                  <h4>{panorama.titulo_panorama}</h4>
-                  <p>
-                    {panorama.hora_inicio_panorama +
-                      " - " +
-                      panorama.hora_termino_panorama}
-                  </p>
-                  <p>{panorama.ubicacion_ciudad_panorama}</p>
-                  <p>{panorama.descripcion_panorama}</p>
-                  <p>{"Dirección: " + panorama.direccion_panorama}</p>
-                  <p>{"Creador: " + panorama.creador_panorama}</p>
+                    <div className="entry-slider">
+                      <Form.Check
+                        type="switch"
+                        id={`panorama-status-${panorama._id}`}
+                        label={
+                          panorama.status_panorama === "activo"
+                            ? "Activo"
+                            : "Inactivo"
+                        }
+                        checked={panorama.status_panorama === "activo"}
+                        onChange={(e) =>
+                          handlePanoramaStatusChange(
+                            panorama._id,
+                            e.target.checked ? "activo" : "inactivo"
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
