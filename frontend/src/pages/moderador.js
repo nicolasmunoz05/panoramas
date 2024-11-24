@@ -4,12 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Navbar from "../components/navbar";
 import { getAllEvents, eventoEdited, eventoNew } from "../actions/evento";
-
+import {
+  getAllPanoramas,
+  panoramaEdited,
+  panoramaNew,
+} from "../actions/panorama";
 import "../styles/moderador.css";
 
 const Moderador = () => {
   const dispatch = useDispatch();
   const { eventos } = useSelector((state) => state.eventos);
+  const { panoramas } = useSelector((state) => state.panoramas);
 
   // Estado local para controlar la pestaña activa
   const [activeTab, setActiveTab] = useState("Por revisar");
@@ -17,6 +22,9 @@ const Moderador = () => {
   // Cargar eventos al inicializar
   useEffect(() => {
     dispatch(getAllEvents());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllPanoramas());
   }, [dispatch]);
 
   // Manejo de pestañas
@@ -49,6 +57,16 @@ const Moderador = () => {
       return evento.aceptacion_evento === "aceptado";
     if (activeTab === "Rechazados")
       return evento.aceptacion_evento === "rechazado";
+    return false;
+  });
+
+  const filteredPanoramas = panoramas?.filter((panorama) => {
+    if (activeTab === "Por revisar")
+      return panorama.aceptacion_panorama === "pendiente";
+    if (activeTab === "Aprobados")
+      return panorama.aceptacion_panorama === "aceptado";
+    if (activeTab === "Rechazados")
+      return panorama.aceptacion_panorama === "rechazado";
     return false;
   });
 
@@ -111,7 +129,7 @@ const Moderador = () => {
           </Col>
         </Row>
 
-        {/* Listado de entradas */}
+        {/* Listado de Eventos */}
         <div className="entries">
           {filteredPublicaciones?.map((evento) => (
             <div key={evento._id} className="entry">
@@ -182,6 +200,42 @@ const Moderador = () => {
                       Restaurar
                     </Button>
                   </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Listado de Panoramas */}
+
+        <div className="entries">
+          {filteredPublicaciones?.map((panorama) => (
+            <div key={panorama._id} className="entry">
+              <div className="entry-content">
+                <div className="entry-image">
+                  {panorama.img_panorama?.length > 0 ? (
+                    <img
+                      src={panorama.img_panorama[0]}
+                      alt="Evento"
+                      className="event-image"
+                      onClick={() => handleImageClick(panorama.img_panorama[0])}
+                    />
+                  ) : (
+                    <div className="placeholder-image">Sin imagen</div>
+                  )}
+                </div>
+
+                <div className="entry-details">
+                  <h4>{panorama.titulo_panorama}</h4>
+                  <p>
+                    {panorama.hora_inicio_panorama +
+                      " - " +
+                      panorama.hora_termino_panorama}
+                  </p>
+                  <p>{panorama.ubicacion_ciudad_panorama}</p>
+                  <p>{panorama.descripcion_panorama}</p>
+                  <p>{"Dirección: " + panorama.direccion_panorama}</p>
+                  <p>{"Creador: " + panorama.creador_panorama}</p>
                 </div>
               </div>
             </div>

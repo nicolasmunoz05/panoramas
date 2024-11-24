@@ -3,5 +3,7 @@ export const types = {
   addEvento: "[Eventos] addEvento",
   updateEvento: "[Eventos] updateEvento",
 
-  getPanoramas: "[Panoramas] getallpanoramas",
+  getPanoramas: "[Panoramas] getAllPanoramas",
+  addPanorama: "[Panoramas] addPanorama",
+  updatePanorama: "[Panoramas] updatePanorama",
 };
