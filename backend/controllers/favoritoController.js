@@ -20,10 +20,11 @@ export const encontrarTodoFavorito = async (req, res) => {
     }
 };
 
+//encontrar favoritos por id de usuario
+
 export const encontrarFavorito = async (req, res) => {
     try {
-      const { id } = req.params; // ID del usuario
-      // Consulta los favoritos del usuario y popula panoramas y eventos
+      const { id } = req.params; 
       const favoritos = await Favorito.find({ usuario_favorito: id })
         .populate('panorama_favorito')
         .populate('evento_favorito');
@@ -45,4 +46,7 @@ export const encontrarFavorito = async (req, res) => {
       res.status(500).json({ message: 'Error al obtener los favoritos.', error: error.message });
     }
   };
-  //puede ser
+
+  // borra un panorama
+
+  
