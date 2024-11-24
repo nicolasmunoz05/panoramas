@@ -18,6 +18,7 @@ export const crearUsuario = async (req, res) => {
         res.json({ message: error.message }); 
     }
 };
+
 /*export const crearUsuario = async (req, res) => {
     try {
         console.log('Archivo recibido:', req.file);
@@ -60,10 +61,6 @@ export const encontrarUsuarioCorreo = async (req, res) => {
     }
   };
   
-  
-
-
-
 
 //funcion para encontrar los usuarios, get
 export const encontrarTodoUsuario = async (req, res) => {
