@@ -12,7 +12,7 @@ const comentarioSchema = new mongoose.Schema({
       tipo: { type: String, enum: ['Panorama', 'Evento'], required: true },
       id: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'relacionadoCon.tipo' }
     }
-  });
+  }, { versionKey: false });
 
   export default mongoose.model('Comentario', comentarioSchema);
 

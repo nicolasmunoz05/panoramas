@@ -14,7 +14,7 @@ export const crearComentario = async (req, res) => {
   // obtener todos los comentarios
 export const obtenerTodosComentarios = async (req, res) => {
     try {
-      const comentarios = await Comentario.find().populate('usuario_comentario', 'nombre'); // Puedes agregar más campos a populate si lo necesitas
+      const comentarios = await Comentario.find().populate('usuario_comentario', 'nombre_usuario img_usuario'); // Puedes agregar más campos a populate si lo necesitas
       res.status(200).json(comentarios);
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -27,7 +27,7 @@ export const obtenerComentariosPorRelacion = async (req, res) => {
     try {
       const comentarios = await Comentario.find({ 
         'relacionadoCon_comentario.id': id 
-      }).populate('usuario_comentario', 'nombre_usuario'); 
+      }).populate('usuario_comentario', 'nombre_usuario img_usuario'); 
       res.status(200).json(comentarios);
     } catch (err) {
       res.status(400).json({ error: err.message });

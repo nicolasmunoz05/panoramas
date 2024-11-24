@@ -7,7 +7,6 @@ router.post("/", crearComentario);
 router.get("/", obtenerTodosComentarios);
 router.get("/:id", obtenerComentariosPorRelacion);
 router.put("/:id", editarComentario);
-
 router.delete("/:id", eliminarComentario);
 
 
