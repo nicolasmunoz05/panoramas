@@ -6,10 +6,12 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
+  // Este useEffect se ejecuta solo una vez al montar el componente
   useEffect(() => {
-    checkAuthStatus();
+    checkAuthStatus(); // Verificamos el estado de autenticación cuando el componente se monta
   }, []);
 
+  // Función para verificar si el usuario está autenticado
   const checkAuthStatus = () => {
     const token = localStorage.getItem("token");
     const userStr = localStorage.getItem("user");
@@ -21,15 +23,14 @@ export const AuthProvider = ({ children }) => {
         setUserData(user);
       } catch (error) {
         console.error("Error al parsear los datos del usuario:", error);
-        setIsLoggedIn(false);
-        setUserData(null);
+        clearAuthData();
       }
     } else {
-      setIsLoggedIn(false);
-      setUserData(null);
+      clearAuthData();
     }
   };
 
+  // Función para guardar el token y los datos del usuario
   const login = (token, user) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
@@ -37,7 +38,13 @@ export const AuthProvider = ({ children }) => {
     setUserData(user);
   };
 
+  // Función para cerrar sesión y eliminar los datos almacenados
   const logout = () => {
+    clearAuthData();
+  };
+
+  // Función para eliminar los datos del usuario del almacenamiento local y resetear el estado
+  const clearAuthData = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);
@@ -51,6 +58,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Hook para acceder al contexto de autenticación
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -58,3 +66,6 @@ export const useAuth = () => {
   }
   return context;
 };
+
+
+export default AuthContext;

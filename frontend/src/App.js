@@ -39,6 +39,7 @@ import About from "./pages/about";
 import Register from "./pages/register";
 import PublicarEvent from "./pages/publicar";
 import ForgotPassword from "./pages/forgotPassword";
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/publicar" element={<PublicarEvent/>} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </AuthProvider>

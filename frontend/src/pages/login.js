@@ -174,6 +174,16 @@ const Login = () => {
             }
     
             login(data.token, data.user);
+                    // Consulta para obtener el ID del usuario
+        const userResponse = await fetch(`${process.env.REACT_APP_API_URL}/usuario/${credentials.email_usuario}`);
+        const userData = await userResponse.json();
+
+        if (!userResponse.ok) {
+            throw new Error(userData.message || "Error al obtener el ID del usuario");
+        }
+
+        // Guarda el ID del usuario en el contexto o almacenamiento local
+        localStorage.setItem("userId", userData.usuario._id);
     
             alert("Inicio de sesión exitoso");
             navigate("/");
