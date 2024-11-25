@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/publicar.css';
 import Navbar from '../components/navbar.js';
+=======
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/publicar.css";
+import Navbar from "../components/navbar.js";
+import fetchWithToken from "../utils/fetch.js"; // Asegúrate de que la ruta sea correctaaaaa
+>>>>>>> 765666715059fa01e517c75afd3b43d3e0dbe5ae
 
 const PublicarEvent = () => {
   const [titulo_evento, setTituloEvento] = useState('');
