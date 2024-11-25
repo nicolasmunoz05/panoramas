@@ -63,22 +63,28 @@ const Home = () => {
     items.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
 
   // Filtrar eventos y panoramas según el término de búsqueda
-  const filteredEventos = eventos.filter(
-    (evento) =>
-      evento.titulo_evento.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      evento.descripcion_breve_evento
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
-  const filteredPanoramas = panoramas.filter(
-    (panorama) =>
-      panorama.titulo_panorama
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      panorama.descripcion_panorama
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
+  // Filtrar eventos aceptados y que coincidan con la búsqueda
+  const filteredEventos = eventos
+    .filter((evento) => evento.aceptacion_evento === "aceptado") // Filtro de aceptación
+    .filter(
+      (evento) =>
+        evento.titulo_evento.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        evento.descripcion_breve_evento
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    );
+  // Filtrar panoramas activos y que coincidan con la búsqueda
+  const filteredPanoramas = panoramas
+    .filter((panorama) => panorama.status_panorama === "activo") // Filtro de actividad
+    .filter(
+      (panorama) =>
+        panorama.titulo_panorama
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        panorama.descripcion_panorama
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    );
   // Nuevo useEffect para resetear páginas
   useEffect(() => {
     setEventPage(0); // Resetea a la primera página de eventos
@@ -105,7 +111,9 @@ const Home = () => {
         </div>
       </div>
       {/* Carrusel de eventos destacados */}
-      {eventos.length > 0 && <Carousel eventos={eventos.slice(0, 5)} />}
+      {eventos.length > 0 && (
+        <Carousel eventos={filteredEventos.slice(0, 5)} /> // Pasar solo los eventos aceptados
+      )}
 
       {/* Eventos */}
       <>
