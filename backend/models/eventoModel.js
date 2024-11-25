@@ -40,9 +40,8 @@ const eventoSchema = new mongoose.Schema({
       required: true
     },
     creador_evento: {
-      type: String,
-      ref: Usuario,
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Usuario
     },
     status_evento: {
       type: String,

@@ -48,7 +48,7 @@ const Carousel = ({ eventos }) => {
               <strong>Descripción:</strong> {evento.descripcion_evento}
             </p>
             <p>
-              <strong>Ciudad:</strong> {evento.ubicacion_evento_ciudad}
+              <strong>Ciudad:</strong> {evento.ubicacion_ciudad_evento}
             </p>
             <p>
               <strong>Dirección:</strong> {evento.direccion_evento}

@@ -1,86 +1,39 @@
-//const baseUrl = process.env.REACT_APP_API_URL;
-//
-//const fetchWithToken = async (endpoint, data = null, method = "GET") => {
-//  const url = `${baseUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
-//
-//  const token = localStorage.getItem("token");
-//
-//  const headers = {};
-//  if (token) {
-//    headers["Authorization"] = `Bearer ${token}`;
-//  }
-//
-//  const options = { method, headers };
-//
-//  if (method !== "GET" && data) {
-//    if (data instanceof FormData) {
-//      options.body = data; // FormData ya incluye las cabeceras correctas
-//    } else {
-//      headers["Content-Type"] = "application/json";
-//      options.body = JSON.stringify(data);
-//    }
-//  }
-//
-//  console.log("Enviando solicitud a:", url, options);
-//
-//  try {
-//    const response = await fetch(url, options);
-//    if (!response.ok) {
-//      const errorDetails = await response.json().catch(() => null);
-//      throw new Error(errorDetails?.message || "Error desconocido");
-//    }
-//    return await response.json();
-//  } catch (error) {
-//    console.error("Error al realizar la solicitud:", error.message);
-//    throw error;
-//  }
-//};
-//
-//export default fetchWithToken;
-
-
-//onst baseUrl = process.env.REACT_APP_API_URL
-//
-//onst fetchWithToken = (endpoint, data, method = "GET") => {
-//   const url = `${baseUrl}/${endpoint}`;
-// 
-//   if (method === "GET") {
-//     return fetch(url, {
-//       method,
-//     });
-//   } else {
-//     return fetch(url, {
-//       method,
-//       headers: {
-//         "Content-type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
-//   }
-// };
-//
-// export default fetchWithToken
-
-
-
-
 const baseUrl = process.env.REACT_APP_API_URL;
 
 if (!baseUrl) {
-  console.error('REACT_APP_API_URL no está definida en las variables de entorno');
+  console.error(
+    "REACT_APP_API_URL no está definida en las variables de entorno"
+  );
 }
 
-const fetchWithToken = async (endpoint, data = null, method = "GET") => {
-  // Verificar y construir URL
-  const url = `${baseUrl || ''}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+/**
+ * Función para realizar solicitudes HTTP con o sin token, admitiendo FormData.
+ * @param {string} endpoint - Endpoint de la API.
+ * @param {object|null} data - Datos a enviar en el cuerpo de la solicitud.
+ * @param {string} method - Método HTTP (GET, POST, PUT, DELETE).
+ * @param {boolean} useAuth - Indica si se debe incluir el token de autenticación. Default: true.
+ * @returns {Promise<object|string>} Respuesta de la API.
+ */
+const fetchWithToken = async (
+  endpoint,
+  data = null,
+  method = "GET",
+  useAuth = true
+) => {
+  // Construcción de la URL
+  const url = `${baseUrl || ""}${
+    endpoint.startsWith("/") ? endpoint : `/${endpoint}`
+  }`;
   const token = localStorage.getItem("token");
 
-  if (!token) {
-    console.warn('No se encontró token en localStorage');
+  if (!token && useAuth) {
+    console.warn(
+      "No se encontró token en localStorage para una solicitud autenticada"
+    );
   }
 
   const headers = {};
-  if (token) {
+  if (useAuth && token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
@@ -88,8 +41,8 @@ const fetchWithToken = async (endpoint, data = null, method = "GET") => {
 
   if (method !== "GET" && data) {
     if (data instanceof FormData) {
-      // Log del contenido de FormData para debugging
-      console.log('FormData contenido:', Object.fromEntries(data.entries()));
+      // Log del contenido de FormData para depuración
+      console.log("FormData contenido:", Object.fromEntries(data.entries()));
       options.body = data;
     } else {
       headers["Content-Type"] = "application/json";
@@ -102,53 +55,55 @@ const fetchWithToken = async (endpoint, data = null, method = "GET") => {
     url,
     method,
     headers: { ...options.headers },
-    bodyType: data instanceof FormData ? 'FormData' : typeof data,
-    token: token ? 'Present' : 'Missing'
+    bodyType: data instanceof FormData ? "FormData" : typeof data,
+    token: useAuth ? (token ? "Present" : "Missing") : "Not required",
   });
 
   try {
     console.log(`Iniciando fetch a ${url}...`);
     const response = await fetch(url, options);
-    console.log('Respuesta recibida:', {
+    console.log("Respuesta recibida:", {
       status: response.status,
       statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries())
+      headers: Object.fromEntries(response.headers.entries()),
     });
 
     const contentType = response.headers.get("content-type");
-    
+
     if (!response.ok) {
       let errorMessage;
       try {
         if (contentType && contentType.includes("application/json")) {
           const errorData = await response.json();
-          errorMessage = errorData.message || errorData.error || 'Error en la solicitud';
+          errorMessage =
+            errorData.message || errorData.error || "Error en la solicitud";
         } else {
           const errorText = await response.text();
-          errorMessage = errorText || `Error ${response.status}: ${response.statusText}`;
+          errorMessage =
+            errorText || `Error ${response.status}: ${response.statusText}`;
         }
       } catch (e) {
         errorMessage = `Error ${response.status}: ${response.statusText}`;
       }
-      
-      console.error('Error en la respuesta:', {
+
+      console.error("Error en la respuesta:", {
         status: response.status,
         message: errorMessage,
-        contentType
+        contentType,
       });
-      
+
       throw new Error(errorMessage);
     }
 
     // Procesar respuesta exitosa
-    console.log('Procesando respuesta exitosa...');
+    console.log("Procesando respuesta exitosa...");
     if (contentType && contentType.includes("application/json")) {
       const jsonResponse = await response.json();
-      console.log('Respuesta JSON:', jsonResponse);
+      console.log("Respuesta JSON:", jsonResponse);
       return jsonResponse;
     } else {
       const textResponse = await response.text();
-      console.log('Respuesta texto:', textResponse);
+      console.log("Respuesta texto:", textResponse);
       return textResponse;
     }
   } catch (error) {
@@ -158,7 +113,7 @@ const fetchWithToken = async (endpoint, data = null, method = "GET") => {
       stack: error.stack,
       url,
       method,
-      headers: options.headers
+      headers: options.headers,
     });
     throw error;
   }

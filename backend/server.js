@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
 import cors from "cors";
-
+import "./tasks/eventStatusUpdater.js";
 import eventoRoutes from "./routes/eventoRoutes.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import panoramaRoutes from "./routes/panoramaRoutes.js";
