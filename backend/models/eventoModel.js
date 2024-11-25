@@ -21,8 +21,7 @@ const eventoSchema = new mongoose.Schema({
       required: true
     },
     descripcion_breve_evento:{
-      type: String,
-      required: true
+      type: String
     },
     ubicacion_comuna_evento:{
       type: String,

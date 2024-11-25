@@ -14,6 +14,7 @@ import longinRoutes from "./routes/loginRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import authContRoutes from "./routes/authContRoutes.js";
 import favoritoRoutes from "./routes/favoritoRoutes.js";
+import comentarioRoutes from "./routes/comentarioRoutes.js";
 // import placeRoutes from "./routes/placeRoutes.js";
 
 dotenv.config();
@@ -40,6 +41,8 @@ app.use("/public", express.static(`${__dirname}/uploads`));
 app.use("/login", longinRoutes);
 app.use("/auth", authContRoutes);
 app.use("/favorito", favoritoRoutes);
+app.use("/comentario", comentarioRoutes);
+
 
 
 app.get("/", (req, res) => {

@@ -15,39 +15,40 @@ export const getAllPanoramas = () => {
   };
 };
 
-// Agregar Evento
-//   export const productNew = (products) => {
-//   return async (dispatch) => {
-//     try {
-//       const resp = await fetchWithToken("products", products, "POST");
-//       const body = await resp.json();
+//Agregar Panorama
+export const panoramaNew = (panoramas) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchWithToken("panoramas", panoramas, "POST");
+      const body = await resp.json();
+      if (body) {
+        dispatch({ type: types.panoramaNew, payload: panoramas });
+        // Swal.fire("Success", "Producto guardado correctamente", "success");
+      }
+    } catch (error) {
+      // Swal.fire("Error", "No se pudo guardar el producto", "error");
+    }
+  };
+};
 
-//       if (body.ok) {
-//         dispatch({ type: types.productNew, payload: products });
-//         dispatch(productsLoaded());
-//         Swal.fire("Success", "Producto guardado correctamente", "success");
-//       }
-//     } catch (error) {
-//       Swal.fire("Error", "No se pudo guardar el producto", "error");
-//     }
-//   };
-// };
+//Update
+export const panoramaEdited = (panoramas) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchWithToken(
+        `panorama/${panoramas._id}`,
+        panoramas,
+        "PUT"
+      );
+      const body = await resp.json();
 
-// Update
-// export const productEdited = (products) => {
-//   return async (dispatch) => {
-//     try {
-//       const resp = await fetchWithToken(
-//         `products/${products._id}`,
-//         products,
-//         "PUT"
-//       );
-//       const body = await resp.json();
-//       if (body.ok) {
-//         dispatch(productDataToEdit(products));
-//       }
-//     } catch (error) {
-//       Swal.fire("Error", "No se pudo editar el producto", "error");
-//     }
-//   };
-// };
+      // aca debe devolver un booleano, un true o false para que la dependencia no sea de un mensaje que pueda cambiar
+      if (body.message === "Panorama actualizado con éxito") {
+        dispatch({ type: types.updatePanorama, payload: panoramas });
+        dispatch(getAllPanoramas());
+      }
+    } catch (error) {
+      //Swal.fire("Error", "No se pudo editar el producto", "error");
+    }
+  };
+};
