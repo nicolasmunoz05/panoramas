@@ -1,54 +1,56 @@
 import fetchWithToken from "../utils/fetch";
 import { types } from "../types/types";
 
+// Obtener todos los panoramas (público)
 export const getAllPanoramas = () => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken("panorama");
-      const body = await resp.json();
-
-      const panorama = body;
+      // Solicitud pública, useAuth = false
+      const panorama = await fetchWithToken("panorama", null, "GET", false);
       dispatch({ type: types.getPanoramas, payload: panorama });
     } catch (error) {
-      //Swal.fire("Error", "No se pudieron obtener los productos", "error");
+      console.error("Error al obtener los panoramas:", error);
+      // Swal.fire("Error", "No se pudieron obtener los panoramas", "error");
     }
   };
 };
 
-//Agregar Panorama
+// Agregar un panorama (privado)
 export const panoramaNew = (panoramas) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken("panoramas", panoramas, "POST");
-      const body = await resp.json();
+      // Solicitud privada, useAuth por defecto es true
+      const body = await fetchWithToken("panoramas", panoramas, "POST");
       if (body) {
         dispatch({ type: types.panoramaNew, payload: panoramas });
-        // Swal.fire("Success", "Producto guardado correctamente", "success");
+        // Swal.fire("Success", "Panorama guardado correctamente", "success");
       }
     } catch (error) {
-      // Swal.fire("Error", "No se pudo guardar el producto", "error");
+      console.error("Error al guardar el panorama:", error);
+      // Swal.fire("Error", "No se pudo guardar el panorama", "error");
     }
   };
 };
 
-//Update
+// Editar un panorama (privado)
 export const panoramaEdited = (panoramas) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken(
+      // Solicitud privada, useAuth por defecto es true
+      const body = await fetchWithToken(
         `panorama/${panoramas._id}`,
         panoramas,
         "PUT"
       );
-      const body = await resp.json();
 
-      // aca debe devolver un booleano, un true o false para que la dependencia no sea de un mensaje que pueda cambiar
+      // Valida si la actualización fue exitosa
       if (body.message === "Panorama actualizado con éxito") {
         dispatch({ type: types.updatePanorama, payload: panoramas });
-        dispatch(getAllPanoramas());
+        dispatch(getAllPanoramas()); // Refresca la lista de panoramas
       }
     } catch (error) {
-      //Swal.fire("Error", "No se pudo editar el producto", "error");
+      console.error("Error al editar el panorama:", error);
+      // Swal.fire("Error", "No se pudo editar el panorama", "error");
     }
   };
 };

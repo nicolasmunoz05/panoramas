@@ -136,9 +136,9 @@ const Home = () => {
                       className="item-link"
                     >
                       <div className="date-overlay">
-                        {evento.fecha_evento_inicio
+                        {evento.fecha_inicio_evento
                           ? format(
-                              new Date(evento.fecha_evento_inicio),
+                              new Date(evento.fecha_inicio_evento),
                               "dd-MM-yyyy "
                             )
                           : "Fecha no disponible "}

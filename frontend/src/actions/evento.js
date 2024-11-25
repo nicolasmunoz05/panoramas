@@ -1,54 +1,56 @@
 import fetchWithToken from "../utils/fetch";
 import { types } from "../types/types";
 
+// Obtener todos los eventos (público)
 export const getAllEvents = () => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken("evento");
-      const body = await resp.json();
-
-      const evento = body;
+      // Solicitud pública, useAuth = false
+      const evento = await fetchWithToken("evento", null, "GET", false);
       dispatch({ type: types.getEvents, payload: evento });
     } catch (error) {
-      //Swal.fire("Error", "No se pudieron obtener los productos", "error");
+      console.error("Error al obtener los eventos:", error);
+      // Swal.fire("Error", "No se pudieron obtener los eventos", "error");
     }
   };
 };
 
-//Agregar Evento
+// Agregar un evento (privado)
 export const eventoNew = (eventos) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken("eventos", eventos, "POST");
-      const body = await resp.json();
+      // Solicitud privada, useAuth por defecto es true
+      const body = await fetchWithToken("eventos", eventos, "POST");
       if (body) {
         dispatch({ type: types.eventoNew, payload: eventos });
-        // Swal.fire("Success", "Producto guardado correctamente", "success");
+        // Swal.fire("Success", "Evento guardado correctamente", "success");
       }
     } catch (error) {
-      // Swal.fire("Error", "No se pudo guardar el producto", "error");
+      console.error("Error al guardar el evento:", error);
+      // Swal.fire("Error", "No se pudo guardar el evento", "error");
     }
   };
 };
 
-//Update
+// Editar un evento (privado)
 export const eventoEdited = (eventos) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchWithToken(
+      // Solicitud privada, useAuth por defecto es true
+      const body = await fetchWithToken(
         `evento/${eventos._id}`,
         eventos,
         "PUT"
       );
-      const body = await resp.json();
 
-      // aca debe devolver un booleano, un true o false para que la dependencia no sea de un mensaje que pueda cambiar
+      // Valida si la actualización fue exitosa
       if (body.message === "Evento actualizado con éxito") {
         dispatch({ type: types.updateEvento, payload: eventos });
-        dispatch(getAllEvents());
+        dispatch(getAllEvents()); // Refresca la lista de eventos
       }
     } catch (error) {
-      //Swal.fire("Error", "No se pudo editar el producto", "error");
+      console.error("Error al editar el evento:", error);
+      // Swal.fire("Error", "No se pudo editar el evento", "error");
     }
   };
 };
