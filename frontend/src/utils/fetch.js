@@ -1,20 +1,34 @@
 const baseUrl = process.env.REACT_APP_API_URL;
 
-const fetchWithToken = async (endpoint, data = null, method = "GET") => {
-  const url = `${baseUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
-
-  const token = localStorage.getItem("token");
+const fetchWithToken = async (
+  endpoint,
+  data = null,
+  method = "GET",
+  useAuth = true
+) => {
+  const url = `${baseUrl}${
+    endpoint.startsWith("/") ? endpoint : `/${endpoint}`
+  }`;
 
   const headers = {};
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
   const options = { method, headers };
 
+  // Agregar token si `useAuth` está habilitado y hay token disponible
+  if (useAuth) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    } else {
+      console.warn(
+        "Intentando usar autenticación, pero no hay token disponible."
+      );
+    }
+  }
+
+  // Configurar el cuerpo de la solicitud si no es GET
   if (method !== "GET" && data) {
     if (data instanceof FormData) {
-      options.body = data; // FormData ya incluye las cabeceras correctas
+      options.body = data; // FormData ya maneja sus propias cabeceras
     } else {
       headers["Content-Type"] = "application/json";
       options.body = JSON.stringify(data);
@@ -37,27 +51,3 @@ const fetchWithToken = async (endpoint, data = null, method = "GET") => {
 };
 
 export default fetchWithToken;
-
-
-
-//const baseUrl = process.env.REACT_APP_API_URL
-//
-//const fetchWithToken = (endpoint, data, method = "GET") => {
-//    const url = `${baseUrl}/${endpoint}`;
-//  
-//    if (method === "GET") {
-//      return fetch(url, {
-//        method,
-//      });
-//    } else {
-//      return fetch(url, {
-//        method,
-//        headers: {
-//          "Content-type": "application/json",
-//        },
-//        body: JSON.stringify(data),
-//      });
-//    }
-//  };
-//
-//  export default fetchWithToken
