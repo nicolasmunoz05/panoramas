@@ -1,250 +1,114 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import Navbar from "../components/navbar.js";
-import fetchWithToken from "../utils/fetch.js";
-import "../styles/profile.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import Navbar from '../components/navbar';
+import "../styles/profile.css"
 
 const Profile = () => {
-    const { userData, login, logout } = useAuth();
-    const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({
-        nombre_usuario: "",
-        telefono_usuario: "",
-        email_usuario: "",
-        fecha_nacimiento_usuario: "",
-        img_usuario: []
-    });
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
-    const [selectedImage, setSelectedImage] = useState(null);
+    const { isLoggedIn, userData, logout } = useAuth();
+    const [profile, setProfile] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadUserData();
-    }, []);
-
-    const loadUserData = async () => {
-        try {
-            const data = await fetchWithToken("/usuario/perfil", {}, "GET");
-            setFormData({
-                nombre_usuario: data.nombre_usuario,
-                telefono_usuario: data.telefono_usuario,
-                email_usuario: data.email_usuario,
-                fecha_nacimiento_usuario: data.fecha_nacimiento_usuario,
-                img_usuario: data.img_usuario || []
-            });
-            setIsLoading(false);
-        } catch (error) {
-            setError("Error al cargar los datos del usuario");
-            setIsLoading(false);
+        if (!isLoggedIn) {
+            navigate('/login'); // Redirige si no hay sesión activa
+        } else if (userData?.email_usuario) {
+            fetchUserProfile(userData.email_usuario);
         }
-    };
+    }, [isLoggedIn, userData, navigate]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleImageChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setSelectedImage(e.target.files[0]);
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        
+    const fetchUserProfile = async (email) => {
         try {
-            const formDataToSend = new FormData();
-            Object.keys(formData).forEach(key => {
-                if (key !== 'img_usuario') {
-                    formDataToSend.append(key, formData[key]);
-                }
+            setLoading(true);
+            const response = await fetch(`http://localhost:8000/usuario/${email}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluye el token en la cabecera
+                },
             });
+            const data = await response.json();
 
-            if (selectedImage) {
-                formDataToSend.append('img_usuario', selectedImage);
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al obtener los datos del usuario');
             }
 
-            const updatedUser = await fetchWithToken(
-                "/usuario/actualizar",
-                formDataToSend,
-                "PUT",
-                true // flag para indicar que es FormData
-            );
-
-            login(localStorage.getItem("token"), updatedUser);
-            setIsEditing(false);
-            alert("Perfil actualizado exitosamente");
-            loadUserData(); // Recargar los datos actualizados
+            setProfile(data.usuario);
         } catch (error) {
-            setError("Error al actualizar el perfil: " + error.message);
+            console.error('Error fetching user profile:', error);
+            setError(error.message);
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 
-    const handleDeleteAccount = async () => {
-        if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+    const handleEditProfile = () => {
+        navigate('/edit-profile', { state: { profile } }); // Redirige a la página de edición con el perfil actual
+    };
+
+    const handleDeleteProfile = async () => {
+        if (window.confirm('¿Estás seguro de que deseas eliminar tu perfil?')) {
             try {
-                await fetchWithToken("/usuario/eliminar", {}, "DELETE");
-                logout();
-                alert("Cuenta eliminada exitosamente");
-                navigate("/");
+                const response = await fetch(`http://localhost:8000/usuario/${profile._id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el perfil');
+                }
+
+                logout(); // Cierra la sesión
+                localStorage.clear();
+                alert('Perfil eliminado con éxito');
+                navigate('/register'); // Redirige al registro después de eliminar el perfil
             } catch (error) {
-                setError("Error al eliminar la cuenta: " + error.message);
+                console.error('Error al eliminar el perfil:', error);
+                setError(error.message);
             }
         }
     };
-
-    if (isLoading) {
-        return (
-            <div>
-                <Navbar />
-                <div className="profile-container">
-                    <div className="loading">Cargando...</div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div>
-            <Navbar />
+            <Navbar /> {/* Navbar para la navegación */}
             <div className="profile-container">
-                <div className="profile-card">
-                    <h2>Mi Perfil</h2>
-                    
-                    {/* Imagen de perfil */}
-                    <div className="profile-image-container">
-                        {formData.img_usuario && formData.img_usuario.length > 0 ? (
-                            <img 
-                                src={formData.img_usuario[0]} 
-                                alt="Foto de perfil" 
-                                className="profile-image"
-                            />
-                        ) : (
-                            <div className="profile-image-placeholder">
-                                Sin foto de perfil
-                            </div>
-                        )}
-                        {isEditing && (
-                            <input
-                                type="file"
-                                onChange={handleImageChange}
-                                accept="image/*"
-                                className="profile-image-input"
-                            />
-                        )}
-                    </div>
+                <h2>Mi Perfil</h2>
 
-                    <form onSubmit={handleSubmit} className="profile-form">
-                        <div className="form-group">
-                            <label>Nombre:</label>
-                            {isEditing ? (
-                                <input
-                                    type="text"
-                                    name="nombre_usuario"
-                                    value={formData.nombre_usuario}
-                                    onChange={handleChange}
-                                    className="profile-input"
-                                    required
+                {error && <p className="error-message">{error}</p>} {/* Mensaje de error */}
+
+                {loading ? (
+                    <p>Cargando...</p> // Muestra mientras los datos se cargan
+                ) : (
+                    profile ? (
+                        <div className="user-info">
+                            <p><strong>Nombre:</strong> {profile.nombre_usuario}</p>
+                            <p><strong>Rol:</strong> {profile.rol_usuario} (No editable)</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {new Date(profile.fecha_nacimiento_usuario).toLocaleDateString()}</p>
+                            <p><strong>Teléfono:</strong> {profile.telefono_usuario}</p>
+                            <p><strong>Email:</strong> {profile.email_usuario}</p>
+                            {profile.img_usuario.length > 0 ? (
+                                <img 
+                                    src={profile.img_usuario[0]} 
+                                    alt="Foto de perfil" 
+                                    style={{ width: '150px', borderRadius: '50%' }} 
                                 />
                             ) : (
-                                <p>{formData.nombre_usuario}</p>
+                                <p>No tienes una foto de perfil.</p>
                             )}
+                            <button onClick={handleEditProfile} className="edit-button">
+                                Editar Perfil
+                            </button>
+                            <button onClick={handleDeleteProfile} className="delete-button">
+                                Eliminar Perfil
+                            </button>
                         </div>
-
-                        <div className="form-group">
-                            <label>Email:</label>
-                            {isEditing ? (
-                                <input
-                                    type="email"
-                                    name="email_usuario"
-                                    value={formData.email_usuario}
-                                    onChange={handleChange}
-                                    className="profile-input"
-                                    required
-                                />
-                            ) : (
-                                <p>{formData.email_usuario}</p>
-                            )}
-                        </div>
-
-                        <div className="form-group">
-                            <label>Teléfono:</label>
-                            {isEditing ? (
-                                <input
-                                    type="tel"
-                                    name="telefono_usuario"
-                                    value={formData.telefono_usuario}
-                                    onChange={handleChange}
-                                    className="profile-input"
-                                    required
-                                />
-                            ) : (
-                                <p>{formData.telefono_usuario}</p>
-                            )}
-                        </div>
-
-                        <div className="form-group">
-                            <label>Fecha de nacimiento:</label>
-                            {isEditing ? (
-                                <input
-                                    type="date"
-                                    name="fecha_nacimiento_usuario"
-                                    value={formData.fecha_nacimiento_usuario.split('T')[0]}
-                                    onChange={handleChange}
-                                    className="profile-input"
-                                    required
-                                />
-                            ) : (
-                                <p>{new Date(formData.fecha_nacimiento_usuario).toLocaleDateString()}</p>
-                            )}
-                        </div>
-
-                        <div className="button-group">
-                            {isEditing ? (
-                                <>
-                                    <button type="submit" className="save-button" disabled={isLoading}>
-                                        {isLoading ? "Guardando..." : "Guardar cambios"}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="cancel-button"
-                                        onClick={() => setIsEditing(false)}
-                                    >
-                                        Cancelar
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button
-                                        type="button"
-                                        className="edit-button"
-                                        onClick={() => setIsEditing(true)}
-                                    >
-                                        Editar perfil
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="delete-button"
-                                        onClick={handleDeleteAccount}
-                                    >
-                                        Eliminar cuenta
-                                    </button>
-                                </>
-                            )}
-                        </div>
-                    </form>
-                    
-                    {error && <div className="error-message">{error}</div>}
-                </div>
+                    ) : (
+                        <p>No se encontraron datos del perfil.</p>
+                    )
+                )}
             </div>
         </div>
     );

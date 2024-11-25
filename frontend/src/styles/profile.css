@@ -1,0 +1,95 @@
+/* Estilos generales para el contenedor del perfil */
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Título principal */
+.profile-container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Información del usuario */
+.user-info p {
+    font-size: 18px;
+    color: #555;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.user-info img {
+    display: block;
+    margin: 15px auto;
+    max-width: 150px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+/* Botones */
+.edit-button,
+.delete-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Botón Editar */
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #45a049;
+}
+
+/* Botón Eliminar */
+.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Mensaje de carga */
+.profile-container p {
+    color: #777;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 15px;
+    }
+
+    .user-info p {
+        font-size: 16px;
+    }
+
+    .edit-button,
+    .delete-button {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
