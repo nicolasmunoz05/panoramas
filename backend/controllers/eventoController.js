@@ -280,3 +280,27 @@ export const filtrarPorRechazadoEvento = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const filtrarPorInactivoEvento = async (req, res) => {
+  try {
+    const data = await Evento.find({
+      status_evento:  "inactivo",
+    }).sort({ fecha_inicio_evento: -1 });
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const eventoTodoActivo = async (req, res) => {
+  try {
+    const resultado = await Evento.updateMany(
+      { status_evento: 'inactivo' }, // Filtro
+      { $set: { status_evento: 'activo' } } // Actualización
+    );
+    
+    console.log(`${resultado.modifiedCount+1} eventos fueron actualizados a "activo"`);
+  } catch (error) {
+    console.error('Error al actualizar eventos:', error);
+  }
+}  

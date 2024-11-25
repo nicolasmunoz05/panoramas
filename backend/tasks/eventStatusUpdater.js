@@ -5,7 +5,7 @@ import moment from "moment";
 const actualizarEventos = async () => {
   try {
     const now = new Date();
-    const eventosActualizados = []; // Lista para almacenar los eventos modificados
+    const eventosActualizados = []; // Lista para almacenar los nombres de los eventos modificados
 
     const eventos = await Evento.find({ status_evento: { $ne: "inactivo" } });
 
@@ -18,7 +18,7 @@ const actualizarEventos = async () => {
         evento.status_evento = "inactivo";
         try {
           await evento.save(); 
-          eventosActualizados.push(evento); // Agregar el evento actualizado a la lista
+          eventosActualizados.push(evento.titulo_evento); // Agregar solo el nombre del evento actualizado a la lista
         } catch (error) {
           console.error(`Error al guardar el evento ${evento._id}: ${error.message}`);
         }
@@ -27,7 +27,9 @@ const actualizarEventos = async () => {
 
     if (eventosActualizados.length > 0) {
       console.log("Eventos actualizados a 'inactivo':");
-      console.log(eventosActualizados); // Muestra los eventos actualizados
+      eventosActualizados.forEach((nombreEvento) => {
+        console.log(nombreEvento); // Mostrar solo el nombre del evento
+      });
     } else {
       console.log("No se actualizaron eventos.");
     }
@@ -39,7 +41,7 @@ const actualizarEventos = async () => {
 };
 
 // Ejecutar inmediatamente al iniciar el programa
-actualizarEventos();
+//actualizarEventos();
 
 // Programar el cron job para que se ejecute cada hora a los minutos 30
 cron.schedule("30 * * * *", actualizarEventos);
