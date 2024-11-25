@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from 'url';
+
 import path from "path";
 import cors from "cors";
 import "./tasks/eventStatusUpdater.js";
@@ -15,7 +16,6 @@ import adminRoutes from "./routes/adminRoutes.js";
 import authContRoutes from "./routes/authContRoutes.js";
 import favoritoRoutes from "./routes/favoritoRoutes.js";
 import comentarioRoutes from "./routes/comentarioRoutes.js";
-// import placeRoutes from "./routes/placeRoutes.js";
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ app.use("/panorama", panoramaRoutes);
 app.use("/admin", adminRoutes);
 app.use("/categoria", categoriaRoutes);
 app.use("/mod", modRoutes);
-// app.use('/places', placeRoutes);
+
 app.use("/public", express.static(`${__dirname}/uploads`));
 app.use("/login", longinRoutes);
 app.use("/auth", authContRoutes);
