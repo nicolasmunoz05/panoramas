@@ -214,7 +214,6 @@
 //
 //export default Navbar;
 
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -225,21 +224,47 @@ const Navbar = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [showRegions, setShowRegions] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
-  
+
   const { isLoggedIn, userData, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const categories = [
-    "Deporte", "Cultura", "Entretenimiento", "Política", "Economía",
-    "Tecnología", "Ciencia", "Salud", "Medio ambiente", "Educación",
-    "Música", "Arte", "Cine", "Teatro", "Danza", "Relajación",
+    "Deporte",
+    "Cultura",
+    "Entretenimiento",
+    "Política",
+    "Economía",
+    "Tecnología",
+    "Ciencia",
+    "Salud",
+    "Medio ambiente",
+    "Educación",
+    "Música",
+    "Arte",
+    "Cine",
+    "Teatro",
+    "Danza",
+    "Relajación",
   ];
 
   const regions = [
-    "Arica y Parinacota", "Tarapacá", "Antofagasta", "Atacama", "Coquimbo",
-    "Valparaíso", "Región Metropolitana", "O'Higgins", "Maule", "Ñuble",
-    "Biobío", "Araucanía", "Los Ríos", "Los Lagos", "Aysén", "Magallanes",
+    "Arica y Parinacota",
+    "Tarapacá",
+    "Antofagasta",
+    "Atacama",
+    "Coquimbo",
+    "Valparaíso",
+    "Región Metropolitana",
+    "O'Higgins",
+    "Maule",
+    "Ñuble",
+    "Biobío",
+    "Araucanía",
+    "Los Ríos",
+    "Los Lagos",
+    "Aysén",
+    "Magallanes",
   ];
 
   useEffect(() => {
@@ -291,6 +316,9 @@ const Navbar = () => {
           <div className="nav-buttons">
             <Link to="/about" className="nav-button">
               Sobre nosotros
+            </Link>
+            <Link to="/moderador" className="nav-button">
+              Vista Moderador 🔒
             </Link>
 
             <button

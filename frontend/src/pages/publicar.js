@@ -2,42 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/publicar.css';
 import Navbar from '../components/navbar.js';
-import fetchWithToken from '../utils/fetch';
-import { useDispatch } from 'react-redux';
-import { eventoNew } from '../actions/evento.js';
 
 const PublicarEvent = () => {
-  const initialFormState = {
-    titulo_evento: '',
-    fecha_inicio_evento: '',
-    fecha_termino_evento: '',
-    descripcion_evento: '',
-    descripcion_breve_evento: '',
-    ubicacion_comuna_evento: '',
-    direccion_evento: '',
-    ubicacion_ciudad_evento: '',
-    ubicacion_region_evento: '',
-    hora_inicio_evento: '',
-    hora_termino_evento: '',
-    categoria_evento: '',
-    precio_evento: '',
-    edad_requerida_evento: 0,
-  };
-
-  const [formData, setFormData] = useState(initialFormState);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState([]);
+  const [titulo_evento, setTituloEvento] = useState('');
+  const [fecha_inicio_evento, setFechaInicioEvento] = useState('');
+  const [fecha_termino_evento, setFechaTerminoEvento] = useState('');
+  const [descripcion_evento, setDescripcionEvento] = useState('');
+  const [descripcion_breve_evento, setDescripcionBrevitoEvento] = useState('');
+  const [ubicacion_comuna_evento, setUbicacionComunaEvento] = useState('');
+  const [direccion_evento, setDireccionEvento] = useState('');
+  const [ubicacion_ciudad_evento, setUbicacionCiudadEvento] = useState('');
+  const [ubicacion_region_evento, setUbicacionRegionEvento] = useState('');
+  const [hora_inicio_evento, setHoraInicioEvento] = useState('');
+  const [hora_termino_evento, setHoraTerminoEvento] = useState('');
+  const [categoria_evento, setCategoriaEvento] = useState('');
+  const [precio_evento, setPrecioEvento] = useState('');
+  const [edad_requerida_evento, setEdadRequeridaEvento] = useState(0);
+  const [img_evento, setImgEvento] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       alert('Por favor, inicia sesión para publicar un evento.');
       navigate('/login');
-      return;
     }
 
     // Limpiar previsualizaciones al desmontar
@@ -141,333 +130,191 @@ const PublicarEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setIsLoading(true);
-  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('No tienes permisos para realizar esta acción.');
+      return;
+    }
+
     try {
-      if (!validateForm()) {
-        setIsLoading(false);
-        return;
-      }
-  
-      const eventFormData = new FormData();
-  
-      // Agregar campos del formulario
-      Object.keys(formData).forEach(key => {
-        if (formData[key] !== '') {
-          eventFormData.append(key, formData[key]);
-        }
+      const response = await fetch('/eventos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          titulo_evento,
+          fecha_inicio_evento,
+          fecha_termino_evento,
+          descripcion_evento,
+          descripcion_breve_evento,
+          ubicacion_comuna_evento,
+          direccion_evento,
+          ubicacion_ciudad_evento,
+          ubicacion_region_evento,
+          hora_inicio_evento,
+          hora_termino_evento,
+          categoria_evento,
+          precio_evento,
+          edad_requerida_evento,
+          img_evento
+        })
       });
-  
-      // Agregar imágenes
-      images.forEach((image) => {
-        eventFormData.append('img_evento', image);
-      });
-  
-      // Obtener el _id del creador desde el token
-      const token = localStorage.getItem('token');
-      if (token) {
-        const payload = JSON.parse(atob(token.split('.')[1])); // Decodifica el payload del token
-        const creatorId = payload._id;
-        eventFormData.append('creador_evento', creatorId);
-      } else {
-        setError('No se pudo obtener la información del usuario. Por favor, inicia sesión nuevamente.');
-        setIsLoading(false);
-        return;
-      }
-  
-      const response = await fetchWithToken('/evento', eventFormData, 'POST');
-      console.log('Respuesta del servidor:', response);
-  
-      if (response) {
+
+      if (response.ok) {
         alert('Evento creado exitosamente.');
-        // Limpiar el formulario
-        setFormData(initialFormState);
-        setImages([]);
-        setImagePreview([]);
-        navigate('/');
+        navigate('/eventos');
+      } else {
+        alert('Error al crear el evento. Verifica los datos e inténtalo nuevamente.');
       }
     } catch (error) {
-      console.error('Error al crear evento:', error);
-      setError('Error al crear el evento. Por favor, verifica tu conexión e inténtalo nuevamente.');
-    } finally {
-      setIsLoading(false);
+      console.error('Error:', error);
+      alert('Error al crear el evento. Revisa tu conexión e inténtalo nuevamente.');
     }
-  };
-  
-
-  const renderImagePreviews = () => {
-    if (imagePreview.length === 0) return null;
-
-    return (
-      <div className="image-preview-container">
-        {imagePreview.map((url, index) => (
-          <div key={index} className="image-preview">
-            <img src={url} alt={`Preview ${index + 1}`} />
-            <button
-              type="button"
-              onClick={() => {
-                URL.revokeObjectURL(url);
-                setImagePreview(prev => prev.filter((_, i) => i !== index));
-                setImages(prev => prev.filter((_, i) => i !== index));
-              }}
-              className="remove-image-btn"
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
-    );
   };
 
   return (
     <div className="container">
       <Navbar />
-      <form onSubmit={handleSubmit} className="evento-form">
-        {error && <div className="error-message">{error}</div>}
-        
-        <div className="form-group">
-          <label className="evento-label">
-            Título del evento:
-            <input
-              type="text"
-              name="titulo_evento"
-              value={formData.titulo_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-              maxLength={100}
-              placeholder="Ingresa el título del evento"
-            />
-          </label>
-        </div>
-
-        <div className="form-group dates">
-          <label className="evento-label">
-            Fecha de inicio:
-            <input
-              type="date"
-              name="fecha_inicio_evento"
-              value={formData.fecha_inicio_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-              min={new Date().toISOString().split('T')[0]}
-            />
-          </label>
-
-          <label className="evento-label">
-            Fecha de término:
-            <input
-              type="date"
-              name="fecha_termino_evento"
-              value={formData.fecha_termino_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-              min={formData.fecha_inicio_evento || new Date().toISOString().split('T')[0]}
-            />
-          </label>
-        </div>
-
-        <div className="form-group times">
-          <label className="evento-label">
-            Hora de inicio:
-            <input
-              type="time"
-              name="hora_inicio_evento"
-              value={formData.hora_inicio_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-            />
-          </label>
-
-          <label className="evento-label">
-            Hora de término:
-            <input
-              type="time"
-              name="hora_termino_evento"
-              value={formData.hora_termino_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-            />
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Descripción del evento:
-            <textarea
-              name="descripcion_evento"
-              value={formData.descripcion_evento}
-              onChange={handleInputChange}
-              className="evento-input evento-textarea"
-              required
-              maxLength={2000}
-              placeholder="Describe tu evento detalladamente"
-              rows={5}
-            />
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Descripción breve:
-            <input
-              type="text"
-              name="descripcion_breve_evento"
-              value={formData.descripcion_breve_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              maxLength={200}
-              placeholder="Breve descripción para mostrar en listados"
-            />
-          </label>
-        </div>
-
-        <div className="form-group location">
-          <label className="evento-label">
-            Comuna:
-            <input
-              type="text"
-              name="ubicacion_comuna_evento"
-              value={formData.ubicacion_comuna_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-              placeholder="Comuna del evento"
-            />
-          </label>
-
-          <label className="evento-label">
-            Ciudad:
-            <input
-              type="text"
-              name="ubicacion_ciudad_evento"
-              value={formData.ubicacion_ciudad_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              placeholder="Ciudad del evento"
-            />
-          </label>
-
-          <label className="evento-label">
-            Región:
-            <input
-              type="text"
-              name="ubicacion_region_evento"
-              value={formData.ubicacion_region_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              placeholder="Región del evento"
-            />
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Dirección:
-            <input
-              type="text"
-              name="direccion_evento"
-              value={formData.direccion_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-              placeholder="Dirección específica del evento"
-            />
-          </label>
-        </div>
-
-
-        <div className="form-group">
-          <label className="evento-label">
-            Categoria:
-            <select
-              name="categoria_evento"
-              value={formData.categoria_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              required
-            >
-              <option value="">Selecciona una categoría</option>
-              <option value="deporte">Deporte</option>
-              <option value="cultura">Cultura</option>
-              <option value="entretenimiento">Entretenimiento</option>
-              <option value="politica">Politica</option>
-              <option value="economía">Economía</option>
-              <option value="tecnología">Tecnología</option>
-              <option value="ciencia">Ciencia</option>
-              <option value="salud">Salud</option>
-              <option value="medio ambiente">Medio ambiente</option>
-              <option value="educación">Educación</option>
-              <option value="música">Música</option>
-              <option value="arte">Arte</option>
-              <option value="cine">Cine</option>
-              <option value="teatro">Teatro</option>
-              <option value="danza">Danza</option>
-              <option value="relajación">Relajación</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Precio:
-            <input
-              type="text"
-              name="precio_evento"
-              value={formData.precio_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              placeholder="Precio del evento (opcional)"
-            />
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Edad mínima requerida:
-            <input
-              type="number"
-              name="edad_requerida_evento"
-              value={formData.edad_requerida_evento}
-              onChange={handleInputChange}
-              className="evento-input"
-              min="0"
-              max="100"
-              placeholder="Edad mínima requerida"
-            />
-          </label>
-        </div>
-
-        <div className="form-group">
-          <label className="evento-label">
-            Imágenes del evento:
-            <input
-              type="file"
-              multiple
-              onChange={handleImageChange}
-              className="evento-input"
-              accept="image/*"
-            />
-            <small className="input-help">
-              Máximo 5MB por imagen. Formatos permitidos: JPG, PNG, GIF
-            </small>
-          </label>
-          {renderImagePreviews()}
-        </div>
-
-        <button 
-          type="submit" 
-          className="evento-button"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Creando evento...' : 'Crear Evento'}
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="evento-form">
+      <label className="evento-label">
+        Título del evento:
+        <input
+          type="text"
+          value={titulo_evento}
+          onChange={(e) => setTituloEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Fecha de inicio:
+        <input
+          type="date"
+          value={fecha_inicio_evento}
+          onChange={(e) => setFechaInicioEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Fecha de término:
+        <input
+          type="date"
+          value={fecha_termino_evento}
+          onChange={(e) => setFechaTerminoEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Descripción del evento:
+        <textarea
+          value={descripcion_evento}
+          onChange={(e) => setDescripcionEvento(e.target.value)}
+          className="evento-input evento-textarea"
+        />
+      </label>
+      <label className="evento-label">
+        Descripción breve:
+        <input
+          type="text"
+          value={descripcion_breve_evento}
+          onChange={(e) => setDescripcionBrevitoEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Ubicación (comuna):
+        <input
+          type="text"
+          value={ubicacion_comuna_evento}
+          onChange={(e) => setUbicacionComunaEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Dirección:
+        <input
+          type="text"
+          value={direccion_evento}
+          onChange={(e) => setDireccionEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Ubicación (ciudad):
+        <input
+          type="text"
+          value={ubicacion_ciudad_evento}
+          onChange={(e) => setUbicacionCiudadEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Ubicación (región):
+        <input
+          type="text"
+          value={ubicacion_region_evento}
+          onChange={(e) => setUbicacionRegionEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Hora de inicio:
+        <input
+          type="time"
+          value={hora_inicio_evento}
+          onChange={(e) => setHoraInicioEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Hora de término:
+        <input
+          type="time"
+          value={hora_termino_evento}
+          onChange={(e) => setHoraTerminoEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Categoría:
+        <input
+          type="text"
+          value={categoria_evento}
+          onChange={(e) => setCategoriaEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Precio:
+        <input
+          type="text"
+          value={precio_evento}
+          onChange={(e) => setPrecioEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Edad requerida:
+        <input
+          type="number"
+          value={edad_requerida_evento}
+          onChange={(e) => setEdadRequeridaEvento(e.target.value)}
+          className="evento-input"
+        />
+      </label>
+      <label className="evento-label">
+        Imagen del evento:
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setImgEvento(e.target.files)}
+          className="evento-input"
+        />
+      </label>
+      <button type="submit" className="evento-button">Crear Evento</button>
+    </form>
+    </fluid>
   );
 };
 
