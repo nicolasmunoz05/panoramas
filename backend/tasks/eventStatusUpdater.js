@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import Evento from "../models/eventoModel.js"; // Ajusta según tu estructura
+import Evento from "../models/eventoModel.js"; 
 import moment from "moment";
 
 const actualizarEventos = async () => {
@@ -18,7 +18,7 @@ const actualizarEventos = async () => {
         evento.status_evento = "inactivo";
         try {
           await evento.save(); 
-          eventosActualizados.push(evento.titulo_evento); // Agregar solo el nombre del evento actualizado a la lista
+          eventosActualizados.push(evento.titulo_evento); 
         } catch (error) {
           console.error(`Error al guardar el evento ${evento._id}: ${error.message}`);
         }
@@ -28,7 +28,7 @@ const actualizarEventos = async () => {
     if (eventosActualizados.length > 0) {
       console.log("Eventos actualizados a 'inactivo':");
       eventosActualizados.forEach((nombreEvento) => {
-        console.log(nombreEvento); // Mostrar solo el nombre del evento
+        console.log(nombreEvento); 
       });
     } else {
       console.log("No se actualizaron eventos.");
