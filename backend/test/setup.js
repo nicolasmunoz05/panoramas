@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 let mongoServer;
+mongoose.set("strictQuery", true);
 
 // Configurar la base de datos en memoria
 before(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
-  // Eliminar las opciones obsoletas
   await mongoose.connect(uri);
 });
 
