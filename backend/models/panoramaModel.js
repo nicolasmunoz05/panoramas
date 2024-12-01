@@ -66,6 +66,16 @@ const panoramaSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    location_panorama: {
+        lat: {
+          type: Number,
+          required: true,
+        },
+        lng: {
+          type: Number,
+          required: true,
+        },
+      }, 
     img_panorama: [
         {
             type: String, 

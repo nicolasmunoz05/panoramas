@@ -1,4 +1,5 @@
 import Evento from "../models/eventoModel.js";
+import geocodeAddress from '../utils/geocode.js';
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -6,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // funcion para crear el evento, post
-
+/*
 export const crearEvento = async (req, res) => {
   try {
     console.log("Archivo recibido:", req.files);
@@ -31,6 +32,43 @@ export const crearEvento = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+*/
+export const crearEvento = async (req, res) => {
+  try {
+    console.log("Archivo recibido:", req.files);
+
+    const imagenesURLs = req.files
+      ? req.files.map((file) => file.filename)
+      : [];
+    if (imagenesURLs.length < 1 || imagenesURLs.length > 3) {
+      return res
+        .status(400)
+        .json({ message: "Debes subir entre 1 y 3 imágenes." });
+    }
+
+    const { direccion_evento, ubicacion_ciudad_evento, ubicacion_region_evento } = req.body;
+
+    // Obtener coordenadas de la dirección
+    const ubicacionGeografica = await geocodeAddress(
+      direccion_evento,
+      ubicacion_ciudad_evento,
+      ubicacion_region_evento
+    );
+
+    // Crear el evento con datos y coordenadas
+    const evento = new Evento({
+      ...req.body,
+      location_evento: ubicacionGeografica,
+    });
+
+    evento.setImgUrl(imagenesURLs);
+
+    const data = await evento.save();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // funcion para encontrar todos los eventos, get
 export const encontrarTodoEvento = async (req, res) => {
@@ -41,6 +79,8 @@ export const encontrarTodoEvento = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 // funcion para encontrar el evento, get
 export const encontrarEvento = async (req, res) => {
@@ -74,6 +114,7 @@ export const editarEvento = async (req, res) => {
       edad_requerida_evento,
       img_toBorrar,
       aceptacion_evento,
+      location_evento,
     } = req.body;
 
     const evento = await Evento.findById(id);
@@ -98,6 +139,7 @@ export const editarEvento = async (req, res) => {
       edad_requerida_evento,
       visitas_evento,
       aceptacion_evento,
+      location_evento
     };
 
     if (img_toBorrar && img_toBorrar.length > 0) {

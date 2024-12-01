@@ -80,6 +80,14 @@ const eventoSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
+    location_evento: {
+      lat: {
+        type: Number
+      },
+      lng: {
+        type: Number
+      },
+    }, 
     img_evento: [
       {
           type: String, 
