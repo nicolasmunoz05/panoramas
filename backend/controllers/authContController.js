@@ -18,7 +18,7 @@ export const requestPasswordReset = async (req, res) => {
     console.log(email_usuario,token);
     res.json({ message: 'Correo de recuperación enviado.' });
   } catch (error) {
-    console.error(error); // Esto mostrará el error en la consola
+    console.error(error);
     res.status(500).json({ error: 'Error en el servidor.' });
   }
 };
@@ -34,7 +34,7 @@ export const resetPassword = async (req, res) => {
 
     if (!user) return res.status(400).json({ error: 'Token inválido o expirado.' });
 
-    user.contrasena_usuario = newPassword; // Hashear la contraseña antes de guardarla
+    user.contrasena_usuario = newPassword; 
     user.resetPasswordToken_usuario = undefined;
     user.resetPasswordExpires_usuario = undefined;
     await user.save();
