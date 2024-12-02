@@ -1,79 +1,108 @@
+/* General styles for the form */
 .evento-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  margin: 2rem auto;
   padding: 2rem;
-  background-color: #f9f9f9; /* Fondo suave */
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
-  width: 80%;
-  max-width: 600px; /* Limitar el ancho */
-  margin: 2rem auto; /* Centrar */
+  background-color: #ffffff; /* Fondo blanco */
+  border-radius: 10px; /* Bordes más redondeados */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Sombra más definida */
+  width: 90%;
+  max-width: 700px; /* Limitar el ancho máximo */
 }
 
+/* Labels for the inputs */
 .evento-label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
-  font-weight: bold; /* Texto más destacado */
-  color: #333; /* Color más oscuro */
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600; /* Letra más gruesa */
+  color: #444; /* Color texto más suave */
+  width: 100%;
 }
 
-.evento-input, .evento-textarea {
-  padding: 0.75rem;
+/* Styles for text inputs and textareas */
+.evento-input,
+.evento-textarea {
+  padding: 0.8rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 100%; /* Usar todo el ancho disponible */
-  max-width: 500px; /* Limitar el ancho máximo */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Usar todo el ancho */
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Evitar desbordamientos */
 }
 
-.evento-input:focus, .evento-textarea:focus {
-  border-color: #007bff; /* Color azul en el foco */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+.evento-input:focus,
+.evento-textarea:focus {
+  border-color: #1d72b8; /* Azul claro */
+  box-shadow: 0 0 6px rgba(29, 114, 184, 0.4); /* Sombra azul */
   outline: none;
 }
 
+/* Textarea styling */
 .evento-textarea {
-  height: 100px;
-  resize: vertical; /* Permitir redimensionar verticalmente */
+  height: 120px;
+  resize: vertical;
 }
 
+/* Submit button styling */
 .evento-button {
-  background-color: #007bff;
-  color: white;
-  padding: 0.75rem 1.5rem;
+  background-color: #1d72b8; /* Azul principal */
+  color: #fff;
+  padding: 0.9rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  width: 100%; /* Ancho completo */
-  max-width: 200px;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 220px; /* Botón ancho limitado */
+  text-align: center;
 }
 
 .evento-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05); /* Ligeramente más grande */
+  background-color: #155d8c; /* Azul más oscuro */
+  transform: translateY(-2px); /* Pequeño movimiento hacia arriba */
 }
 
 .evento-button:active {
-  transform: scale(0.95); /* Ligeramente más pequeño */
+  transform: translateY(1px); /* Movimiento hacia abajo */
 }
 
+/* Image preview styles */
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.image-preview img:hover {
+  transform: scale(1.1); /* Ampliar imagen en hover */
+  border-color: #1d72b8; /* Azul claro en hover */
+}
+
+/* Responsiveness */
 @media (max-width: 768px) {
   .evento-form {
-      width: 90%; /* Reducir el ancho en pantallas pequeñas */
-  }
-
-  .evento-input {
-      width: 100%;
+    width: 95%; /* Reducir el ancho */
+    padding: 1.5rem;
   }
 
   .evento-button {
-      max-width: 100%; /* Botón a ancho completo */
+    max-width: 100%;
   }
 }
