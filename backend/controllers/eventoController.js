@@ -346,3 +346,15 @@ export const eventoTodoActivo = async (req, res) => {
     console.error('Error al actualizar eventos:', error);
   }
 }  
+
+//funcion para encontrar los eventos creados por el usuario
+
+export const eventosCreadosPorUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const eventos = await Evento.find({ creador_evento: id });
+    res.json(eventos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -62,10 +62,8 @@ const Home = () => {
   const getPaginatedItems = (items, page) =>
     items.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
 
-  // Filtrar eventos y panoramas según el término de búsqueda
-  // Filtrar eventos aceptados y que coincidan con la búsqueda
   const filteredEventos = eventos
-    .filter((evento) => evento.aceptacion_evento === "aceptado") // Filtro de aceptación
+    .filter((evento) => evento.aceptacion_evento.toLowerCase() === "aceptado") // Ignorar mayúsculas en aceptación
     .filter(
       (evento) =>
         evento.titulo_evento.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,9 +71,9 @@ const Home = () => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
     );
-  // Filtrar panoramas activos y que coincidan con la búsqueda
+
   const filteredPanoramas = panoramas
-    .filter((panorama) => panorama.status_panorama === "activo") // Filtro de actividad
+    .filter((panorama) => panorama.status_panorama.toLowerCase() === "activo") // Ignorar mayúsculas en estado
     .filter(
       (panorama) =>
         panorama.titulo_panorama
