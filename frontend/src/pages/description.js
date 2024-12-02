@@ -23,6 +23,37 @@ const Description = () => {
   const eventos = useSelector((state) => state.eventos.eventos);
   const panoramas = useSelector((state) => state.panoramas.panoramas);
 
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+
+  const handleOpenReviewsModal = () => {
+    setShowReviewsModal(true);
+    if (id) {
+      fetchReviews(id); // Usamos directamente el `id` recibido desde useParams
+    } else {
+      console.warn("El ID del evento o panorama aún no está disponible.");
+    }
+  };
+
+  const fetchReviews = async (id) => {
+    setLoadingReviews(true); // Mostramos un estado de carga mientras esperamos los datos
+    try {
+      const response = await fetch(`http://localhost:8000/comentario/${id}`);
+      const reviewsData = await response.json();
+      setReviews(reviewsData);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    } finally {
+      setLoadingReviews(false);
+    }
+  };
+
+  const handleCloseReviewsModal = () => {
+    setShowReviewsModal(false);
+    setReviews([]);
+  };
+
   useEffect(() => {
     if (!id) {
       navigate("/");
@@ -125,9 +156,17 @@ const Description = () => {
       alert("Error al conectar con el servidor");
     }
   };
+
+  useEffect(() => {
+    if (!data) {
+      console.log("Datos no disponibles aún");
+    }
+  }, [data]);
+
   return (
     <div>
       <Navbar />
+
       <div className="description-container">
         <main className="main-content">
           <div className="hero-section">
@@ -203,10 +242,54 @@ const Description = () => {
                       </div>
                     </div>
                   )}
+
+                  <button
+                    onClick={handleOpenReviewsModal}
+                    className="add-comment-button"
+                  >
+                    Ver Reseñas
+                  </button>
+
+                  {showReviewsModal && (
+                    <div className="comment-modal">
+                      <div className="modal-content">
+                        <h3>
+                          Reseñas del{" "}
+                          {type === "evento" ? "Evento" : "Panorama"}
+                        </h3>
+                        <button
+                          onClick={handleCloseReviewsModal}
+                          className="close-modal-button"
+                        >
+                          ✖
+                        </button>
+
+                        {loadingReviews ? (
+                          <p>Cargando reseñas...</p>
+                        ) : reviews.length > 0 ? (
+                          <div className="reviews-list">
+                            {reviews.map((review) => (
+                              <div key={review._id} className="review-item">
+                                <h4>
+                                  {review.usuario_comentario.nombre_usuario ||
+                                    "Usuario Anónimo"}
+                                </h4>
+                                <p>{review.texto_comentario}</p>
+                                <span>Nota: {review.nota_comentario}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p>No hay reseñas disponibles.</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <button
                     onClick={handleAddToFavorites}
                     className="favorite-button"
-                    disabled={!data} // Deshabilitar si no hay datos
+                    disabled={!data}
                   >
                     ⭐
                   </button>
