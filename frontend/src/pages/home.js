@@ -18,8 +18,31 @@ const Home = () => {
   const [panoramaPage, setPanoramaPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [nombreUsuario, setNombreUsuario] = useState(null);
+  const [token, setToken] = useState(null);
 
   const itemsPerPage = 4;
+
+  useEffect(() => {
+    // Función para verificar el token en localStorage
+    const checkToken = () => {
+      const storedToken = localStorage.getItem("token"); // Asegúrate de usar la clave correcta
+      setToken(storedToken);
+    };
+
+    checkToken(); // Verificar el token al montar el componente
+
+    // Listener para cambios en localStorage
+    const handleStorageChange = () => {
+      checkToken();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup al desmontar el componente
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Componente estrella dentro de Home.js
   const Star = ({ onToggle }) => {
@@ -40,21 +63,37 @@ const Home = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        // Supongamos que el ID del usuario loggeado está almacenado en localStorage
-        const userId = localStorage.getItem("userId");
-        if (userId) {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        try {
           const response = await axios.get(
             `http://localhost:8000/usuario/id/${userId}`
           );
           setNombreUsuario(response.data.nombre_usuario);
+        } catch (error) {
+          console.error("Error al obtener los datos del usuario:", error);
+          setNombreUsuario(null); // Asegura que no muestre datos obsoletos
         }
-      } catch (error) {
-        console.error("Error al obtener los datos del usuario:", error);
+      } else {
+        setNombreUsuario(null); // No hay usuario activo
       }
     };
 
     fetchUserData();
+
+    // Listener para cambios en localStorage
+    const handleStorageChange = () => {
+      if (!localStorage.getItem("userId")) {
+        setNombreUsuario(null);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup al desmontar el componente
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -115,10 +154,9 @@ const Home = () => {
       <Navbar />
       <div className="header-container">
         <h2>
-          {" "}
-          {nombreUsuario
+          {token
             ? `Hola ${nombreUsuario}! Revise los eventos más vistos`
-            : "Hola Invitado! Revise los eventos más vistos"}
+            : "Bienvenido, inicie sesión para una mejor experiencia"}
         </h2>
 
         <button type="button" className="btn-map">
