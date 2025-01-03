@@ -8,6 +8,7 @@ import { getAllEvents } from "../actions/evento";
 import { getAllPanoramas } from "../actions/panorama";
 import "../styles/home.css";
 import Carousel from "../components/carousel.js"; // Asegúrate de que la ruta sea correcta
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Home = () => {
   const [eventPage, setEventPage] = useState(0);
   const [panoramaPage, setPanoramaPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [nombreUsuario, setNombreUsuario] = useState(null);
 
   const itemsPerPage = 4;
 
@@ -35,6 +37,25 @@ const Home = () => {
       </span>
     );
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Supongamos que el ID del usuario loggeado está almacenado en localStorage
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+          const response = await axios.get(
+            `http://localhost:8000/usuario/id/${userId}`
+          );
+          setNombreUsuario(response.data.nombre_usuario);
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     dispatch(getAllEvents());
@@ -93,7 +114,12 @@ const Home = () => {
     <Container fluid>
       <Navbar />
       <div className="header-container">
-        <h2> Hola Invitado! Revise los eventos mas vistos</h2>
+        <h2>
+          {" "}
+          {nombreUsuario
+            ? `Hola ${nombreUsuario}! Revise los eventos más vistos`
+            : "Hola Invitado! Revise los eventos más vistos"}
+        </h2>
 
         <button type="button" className="btn-map">
           Mapa 📍
